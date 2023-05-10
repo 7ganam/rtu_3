@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
-// import useInits from "./hooks/useInits";
+import { useInit } from "./hooks/useInit";
+import { useLiveData } from "./hooks/useLiveData";
 // import useLiveData from "./hooks/useLiveData";
 
 // ** MUI Imports
@@ -14,7 +15,7 @@ import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 
 // import ChartsTab from "./components/tabs/ChartsTab";
-// import PowerTab from "./components/tabs/PowerTab";
+import PowerTab from "./tabs/PowerTab";
 import { Button } from "@mui/material";
 
 function TabPanel(props) {
@@ -50,10 +51,22 @@ const HomeView = () => {
     setValue(newValue);
   };
 
-  const [inputIP, setInputIp] = useState("");
+  const [inputIP, setInputIp] = useState("http://localhost:5000/");
+
+  const [inits, error, startInit, loadingInit] = useInit();
+
+  const [liveData, liveDataError, startLiveData] = useLiveData();
+  console.log("liveData :>> ", liveData);
+
+  //if inits has a non null value fetch the live data
+  useEffect(() => {
+    if (inits !== null) {
+      startLiveData(inputIP + "live-data");
+    }
+  }, [inits]);
 
   return (
-    <Box sx={{ bgcolor: "#EBEBEBCA", height: "100vh" }}>
+    <Box sx={{ bgcolor: "#EBEBEBCA", height: "120vh" }}>
       <Grid container spacing={3}>
         <Grid item xs={12}>
           <Card
@@ -61,16 +74,20 @@ const HomeView = () => {
           >
             <CardHeader title="Data and configuration"></CardHeader>
             <CardContent>
-              <Typography sx={{ mb: 2 }}>{JSON.stringify("inits")}</Typography>
-              <Button
-                sx={{ mr: 2, mt: 2 }}
-                variant="contained"
-                onClick={() => {
-                  // requestInits(inputIP);
-                }}
-              >
-                Request Inits
-              </Button>
+              {loadingInit ? (
+                <Typography sx={{ mb: 2 }}>Loading...</Typography>
+              ) : (
+                <Button
+                  sx={{ mr: 2, mt: 2 }}
+                  variant="contained"
+                  onClick={() => {
+                    startInit(inputIP + "init");
+                  }}
+                >
+                  Request Inits
+                </Button>
+              )}
+
               <TextField
                 size="small"
                 id="outlined-basic"
@@ -108,11 +125,7 @@ const HomeView = () => {
                   </Tabs>
                 </Box>
                 <TabPanel value={value} index={0}>
-                  {/* <PowerTab
-                    inits={inits}
-                    liveData={liveData}
-                    loadingInits={loading}
-                  /> */}
+                  <PowerTab liveData={liveData} url={inputIP} />
                 </TabPanel>
                 <TabPanel value={value} index={1}>
                   {/* <ChartsTab liveDataArray={liveDataArray} /> */}
