@@ -16,6 +16,7 @@ import TextField from "@mui/material/TextField";
 
 // import ChartsTab from "./components/tabs/ChartsTab";
 import PowerTab from "./tabs/PowerTab";
+import ConfigTab from "./tabs/ConfigTab";
 import { Button } from "@mui/material";
 
 function TabPanel(props) {
@@ -66,7 +67,7 @@ const HomeView = () => {
   }, [inits]);
 
   return (
-    <Box sx={{ bgcolor: "#EBEBEBCA", height: "120vh" }}>
+    <Box sx={{ bgcolor: "#EBEBEBCA", height: "140vh" }}>
       <Grid container spacing={3}>
         <Grid item xs={12}>
           <Card
@@ -134,7 +135,10 @@ const HomeView = () => {
                   Item Three
                 </TabPanel>
                 <TabPanel value={value} index={3}>
-                  Item Four
+                  <ConfigTab
+                    initConfigs={inits?.configs ?? null}
+                    url={inputIP}
+                  />
                 </TabPanel>
               </Box>
             </CardContent>
