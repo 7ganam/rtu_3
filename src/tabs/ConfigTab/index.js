@@ -29,7 +29,6 @@ const ConfigTab = ({ initConfigs, url }) => {
   useEffect(() => {
     if (!initConfigs) return;
     setFormData(initConfigs);
-    console.log("initConfigs :>> ", initConfigs);
   }, [initConfigs]);
 
   const [formData, setFormData] = useState({

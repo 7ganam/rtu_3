@@ -17,6 +17,7 @@ import TextField from "@mui/material/TextField";
 // import ChartsTab from "./components/tabs/ChartsTab";
 import PowerTab from "./tabs/PowerTab";
 import ConfigTab from "./tabs/ConfigTab";
+import LogicControlTab from "./tabs/LogicControlTab";
 import { Button } from "@mui/material";
 
 function TabPanel(props) {
@@ -132,7 +133,7 @@ const HomeView = () => {
                   {/* <ChartsTab liveDataArray={liveDataArray} /> */}
                 </TabPanel>
                 <TabPanel value={value} index={2}>
-                  Item Three
+                  <LogicControlTab liveData={liveData} url={inputIP} />
                 </TabPanel>
                 <TabPanel value={value} index={3}>
                   <ConfigTab
