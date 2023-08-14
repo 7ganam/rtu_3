@@ -1,17 +1,23 @@
 import React, { useState } from "react";
 
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import CircularProgress from "@mui/material/CircularProgress";
+import Grid from "@mui/material/Grid";
 // ** MUI Imports
 import OutlinedInput from "@mui/material/OutlinedInput";
-import Box from "@mui/material/Box";
-import Grid from "@mui/material/Grid";
-import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
-import CircularProgress from "@mui/material/CircularProgress";
-
-import { useForm } from "react-hook-form";
 import axios from "axios";
+import { useForm } from "react-hook-form";
 
-function AddAddressForm({ index, fromLoading, setFormLoading, url }) {
+function AddAddressForm({
+  index,
+  fromLoading,
+  setFormLoading,
+  url,
+  dynamicData,
+  setAllowFormInput,
+}) {
   const {
     register,
     handleSubmit,
@@ -21,11 +27,29 @@ function AddAddressForm({ index, fromLoading, setFormLoading, url }) {
 
   const onSubmit = async (data) => {
     console.log(data);
+    let oldData = dynamicData.map((item, ind) => ({
+      index: ind,
+      address: item.address,
+      varName: item.varName,
+      multiple: item.multiplier,
+    }));
+    let newData = [
+      ...oldData,
+      {
+        index: oldData.length,
+        address: data.address,
+        varName: data.name,
+        multiple: data.multiplier,
+      },
+    ];
+    const request = { count: newData.length, data: newData };
+    console.log("request :>> ", request);
     setFormLoading(true);
     try {
-      const response = await axios.post(url + "add-address", data);
+      const response = await axios.post(url + "add-address", request);
       console.log(response.data);
       setFormLoading(false);
+      setAllowFormInput(false);
     } catch (error) {
       setFormLoading(false);
       console.error(error);

@@ -1,24 +1,24 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useInit } from "./hooks/useInit";
-import { useLiveData } from "./hooks/useLiveData";
-// import useLiveData from "./hooks/useLiveData";
 
+import Box from "@mui/material/Box";
+import { Button } from "@mui/material";
 // ** MUI Imports
 import Card from "@mui/material/Card";
-import Grid from "@mui/material/Grid";
-import Typography from "@mui/material/Typography";
-import CardHeader from "@mui/material/CardHeader";
 import CardContent from "@mui/material/CardContent";
-import Tabs from "@mui/material/Tabs";
-import Tab from "@mui/material/Tab";
-import Box from "@mui/material/Box";
-import TextField from "@mui/material/TextField";
-
+import CardHeader from "@mui/material/CardHeader";
+import ConfigTab from "./tabs/ConfigTab";
+import Grid from "@mui/material/Grid";
+import LogicControlTab from "./tabs/LogicControlTab";
 // import ChartsTab from "./components/tabs/ChartsTab";
 import PowerTab from "./tabs/PowerTab";
-import ConfigTab from "./tabs/ConfigTab";
-import LogicControlTab from "./tabs/LogicControlTab";
-import { Button } from "@mui/material";
+import Tab from "@mui/material/Tab";
+import Tabs from "@mui/material/Tabs";
+import TextField from "@mui/material/TextField";
+import Typography from "@mui/material/Typography";
+import { useInit } from "./hooks/useInit";
+import { useLiveData } from "./hooks/useLiveData";
+
+// import useLiveData from "./hooks/useLiveData";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -58,12 +58,12 @@ const HomeView = () => {
   const [inits, error, startInit, loadingInit] = useInit();
 
   const [liveData, liveDataError, startLiveData] = useLiveData();
-  console.log("liveData :>> ", liveData);
+  // console.log("liveData :>> ", liveData);
 
   //if inits has a non null value fetch the live data
   useEffect(() => {
     if (inits !== null) {
-      startLiveData(inputIP + "live-data");
+      startLiveData(inputIP);
     }
   }, [inits]);
 

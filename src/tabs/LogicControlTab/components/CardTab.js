@@ -1,17 +1,16 @@
-import React from "react";
-import { useState, useEffect } from "react";
+import Select, { SelectChangeEvent } from "@mui/material/Select";
+import { useEffect, useState } from "react";
 
-import OutlinedInput from "@mui/material/OutlinedInput";
 import Box from "@mui/material/Box";
-import Grid from "@mui/material/Grid";
-import { Checkbox } from "@mui/material";
-import axios from "axios";
 import Button from "@mui/material/Button";
+import { Checkbox } from "@mui/material";
+import FormControl from "@mui/material/FormControl";
+import Grid from "@mui/material/Grid";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import Select, { SelectChangeEvent } from "@mui/material/Select";
-
+import OutlinedInput from "@mui/material/OutlinedInput";
+import React from "react";
+import axios from "axios";
 import { useForm } from "react-hook-form";
 
 function CardTab({ card, url }) {
@@ -26,11 +25,28 @@ function CardTab({ card, url }) {
     }
   };
 
+  //function that generates binary string from array of checked ports
+  const generateBinaryString = () => {
+    let binaryString = "";
+    for (let i = 1; i <= 8; i++) {
+      if (checked.includes(i)) {
+        binaryString += "1";
+      } else {
+        binaryString += "0";
+      }
+    }
+    let reversedBinaryString = binaryString.split("").reverse().join("");
+    return reversedBinaryString;
+  };
+
   const onPulseSubmit = async () => {
     const data = {
       card_number: card.number,
       ports: checked,
+      ports_binary: generateBinaryString(),
+      ports_decimal: parseInt(generateBinaryString(), 2),
     };
+    console.log(data);
     try {
       const response = await axios.post(url + "create-pulse", data);
     } catch (error) {

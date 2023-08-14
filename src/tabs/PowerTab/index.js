@@ -1,17 +1,17 @@
 import * as React from "react";
-import { useState, useEffect } from "react";
-// ** MUI Imports
-import OutlinedInput from "@mui/material/OutlinedInput";
-import Box from "@mui/material/Box";
-import Grid from "@mui/material/Grid";
-import Button from "@mui/material/Button";
-import TextField from "@mui/material/TextField";
-import CircularProgress from "@mui/material/CircularProgress";
+
+import { useEffect, useState } from "react";
 
 import AddAddressForm from "./components/AddAddressForm";
-
-import { useForm } from "react-hook-form";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import CircularProgress from "@mui/material/CircularProgress";
+import Grid from "@mui/material/Grid";
+// ** MUI Imports
+import OutlinedInput from "@mui/material/OutlinedInput";
+import TextField from "@mui/material/TextField";
 import axios from "axios";
+import { useForm } from "react-hook-form";
 
 function renderDynamicRows(liveData) {
   if (!liveData?.dynamic) return <></>;
@@ -115,10 +115,17 @@ const PowerTab = ({ liveData, url }) => {
   } = useForm();
 
   const onSubmit = async (data) => {
-    console.log(data);
+    //parse string to integer
+    const deletedIndex = parseInt(data.address);
+    let newData = liveData.dynamic.filter(
+      (item, index) => index !== deletedIndex
+    );
+
+    const request = { count: newData.length, data: newData };
+    console.log(request);
     setFormLoading(true);
     try {
-      const response = await axios.post(url + "delete-address", data);
+      const response = await axios.post(url + "delete-address", request);
       console.log(response.data);
       setFormLoading(false);
     } catch (error) {
@@ -542,6 +549,129 @@ const PowerTab = ({ liveData, url }) => {
               Amperes
             </Grid>
             {/* ------------------- */}
+            <Grid
+              item
+              xs={3}
+              sx={{
+                textAlign: "right",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              Temp1
+            </Grid>
+            <Grid
+              item
+              xs={6}
+              sx={{
+                textAlign: "right",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <OutlinedInput
+                inputProps={{ readOnly: true }}
+                value={liveData?.static?.temp1}
+                id="controlled-text-field"
+              />
+            </Grid>
+            <Grid
+              item
+              xs={3}
+              sx={{
+                textAlign: "right",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              K
+            </Grid>
+            {/* ------------------- */}
+            <Grid
+              item
+              xs={3}
+              sx={{
+                textAlign: "right",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              Temp2
+            </Grid>
+            <Grid
+              item
+              xs={6}
+              sx={{
+                textAlign: "right",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <OutlinedInput
+                inputProps={{ readOnly: true }}
+                value={liveData?.static?.temp2}
+                id="controlled-text-field"
+              />
+            </Grid>
+            <Grid
+              item
+              xs={3}
+              sx={{
+                textAlign: "right",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              K
+            </Grid>
+            {/* ------------------- */}
+            <Grid
+              item
+              xs={3}
+              sx={{
+                textAlign: "right",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              Temp3
+            </Grid>
+            <Grid
+              item
+              xs={6}
+              sx={{
+                textAlign: "right",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <OutlinedInput
+                inputProps={{ readOnly: true }}
+                value={liveData?.static?.temp3}
+                id="controlled-text-field"
+              />
+            </Grid>
+            <Grid
+              item
+              xs={3}
+              sx={{
+                textAlign: "right",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              K
+            </Grid>
+            {/* ------------------- */}
           </Grid>
         </Grid>
         {/* ------------------------------------ */}
@@ -714,6 +844,8 @@ const PowerTab = ({ liveData, url }) => {
             {formState !== "inputHidden" && formState !== "allHidden" && (
               <AddAddressForm
                 index={liveData?.dynamic?.length}
+                dynamicData={liveData?.dynamic}
+                setAllowFormInput={setAllowFormInput}
                 fromLoading={fromLoading}
                 setFormLoading={setFormLoading}
                 url={url}

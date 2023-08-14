@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
+
 import axios from "axios";
 
 export function useLiveData() {
@@ -21,10 +22,30 @@ export function useLiveData() {
 
     const fetchData = async () => {
       try {
-        const result = await axios.get(url);
-        console.log("result :>> ", result.data);
+        const staticDynamic = await axios.get(url + "static-dynamic");
+        const dido1 = await axios.get(url + "dido/1");
+        const dido2 = await axios.get(url + "dido/2");
+        const dido = {
+          ...dido1.data,
+          ...dido2.data,
+        };
+        const algorithms1 = await axios.get(url + "algorithms/1");
+        const algorithms2 = await axios.get(url + "algorithms/2");
+        const algorithms = {
+          ...algorithms1.data,
+          ...algorithms2.data,
+        };
+        const alarms = await axios.get(url + "alarms");
+        const result = {
+          ...staticDynamic.data,
+          ...dido,
+          ...algorithms,
+          ...alarms.data,
+        };
+        // const result = await axios.get(url);
+        // console.log("result :>> ", result);
         if (isMounted) {
-          setData(result.data);
+          setData(result);
           // clearInterval(intervalId);
           // setStartFetching(false);
           // setLoading(false);

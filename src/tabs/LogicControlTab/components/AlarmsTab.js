@@ -1,17 +1,16 @@
-import React from "react";
-import { useState, useEffect } from "react";
+import Select, { SelectChangeEvent } from "@mui/material/Select";
+import { useEffect, useState } from "react";
 
-import OutlinedInput from "@mui/material/OutlinedInput";
 import Box from "@mui/material/Box";
-import Grid from "@mui/material/Grid";
-import { Checkbox } from "@mui/material";
-import axios from "axios";
 import Button from "@mui/material/Button";
+import { Checkbox } from "@mui/material";
+import FormControl from "@mui/material/FormControl";
+import Grid from "@mui/material/Grid";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import Select, { SelectChangeEvent } from "@mui/material/Select";
-
+import OutlinedInput from "@mui/material/OutlinedInput";
+import React from "react";
+import axios from "axios";
 import { useForm } from "react-hook-form";
 
 function AlarmsTab({ alarms, url, cards }) {
@@ -24,9 +23,14 @@ function AlarmsTab({ alarms, url, cards }) {
   const [formData, setFormData] = useState({});
 
   const onSubmit = async () => {
+    console.log("alarms :>> ", alarms);
+    const alarmsNumers = alarms.map((algorithm) => algorithm.number);
+    const maxAlarmsNumber = Math.max(...alarmsNumers);
+    const request = { number: maxAlarmsNumber + 1, ...formData };
+    console.log("request :>> ", request);
     try {
       const response = await axios.post(url + "create-alarm-function", {
-        ...formData,
+        ...request,
       });
     } catch (error) {
       console.error(error);
