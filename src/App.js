@@ -57,8 +57,157 @@ const HomeView = () => {
 
   const [inits, error, startInit, loadingInit] = useInit();
 
-  const [liveData, liveDataError, startLiveData] = useLiveData();
+  const [liveData2, liveDataError, startLiveData] = useLiveData();
   // console.log("liveData :>> ", liveData);
+
+  const liveData = {
+    static: {
+      time: 1,
+      v1RMS: 3,
+      v2RMS: 4,
+      v3RMS: 5,
+      c1RMS: 3,
+      c2RMS: 6,
+      c3RMS: 7,
+      frequency: 33,
+      cNeutral: 33,
+      temp1: 21,
+      temp2: 22,
+      temp3: 23,
+    },
+    dynamic: [
+      {
+        address: "1111111",
+        varName: "var1",
+        multiplier: "1",
+        value: 1.5,
+      },
+      {
+        address: "222222",
+        varName: "var2",
+        multiplier: "2",
+        value: 0,
+      },
+      {
+        address: "333333",
+        varName: "var3",
+        multiplier: "3",
+        value: 31,
+      },
+      {
+        address: "333333",
+        varName: "var3",
+        multiplier: "3",
+        value: 31,
+      },
+      {
+        address: "44",
+        varName: "ss",
+        multiplier: "4",
+        value: 31,
+      },
+    ],
+    dido_cards: [
+      {
+        number: 1,
+        type: "input",
+        ports: [
+          { number: 1, name: "card1Port1", value: "1" },
+          { number: 2, name: "", value: "0" },
+          { number: 3, name: "test", value: "0" },
+          { number: 4, name: "", value: "0" },
+          { number: 5, name: "", value: "0" },
+          { number: 6, name: "random", value: "0" },
+          { number: 7, name: "", value: "0" },
+          { number: 8, name: "", value: "1" },
+        ],
+      },
+      {
+        number: 2,
+        type: "output",
+        ports: [
+          { number: 1, name: "card1Port1", value: "" },
+          { number: 2, name: "", value: "" },
+          { number: 3, name: "test", value: "" },
+          { number: 4, name: "", value: "" },
+          { number: 5, name: "", value: "" },
+          { number: 6, name: "random", value: "" },
+          { number: 7, name: "", value: "" },
+          { number: 8, name: "", value: "" },
+        ],
+      },
+      {
+        number: 3,
+        type: "input",
+        ports: [
+          { number: 1, name: "card1Port1", value: "1" },
+          { number: 2, name: "", value: "0" },
+          { number: 3, name: "test", value: "0" },
+          { number: 4, name: "", value: "0" },
+          { number: 5, name: "", value: "0" },
+          { number: 6, name: "random", value: "0" },
+          { number: 7, name: "", value: "0" },
+          { number: 8, name: "", value: "1" },
+        ],
+      },
+      { number: 4, type: "input", ports: [] },
+      { number: 5, type: "output", ports: [] },
+      { number: 6, type: "input", ports: [] },
+      { number: 7, type: "input", ports: [] },
+    ],
+    algorithms: [
+      {
+        number: "1",
+        logic_variable: "RMS Voltage 1",
+        logic_operation: ">",
+        threshold: "1",
+        port: "c2p3",
+        action: "pulsed",
+        value: "1",
+      },
+      {
+        number: "2",
+        logic_variable: "c1p8",
+        logic_operation: "<",
+        threshold: "1",
+        port: "c2p6",
+        action: "on",
+        value: "1",
+      },
+      {
+        number: "3",
+        logic_variable: "c3p2",
+        logic_operation: "=",
+        threshold: "150",
+        port: "c2p1",
+        action: "on",
+        value: "1",
+      },
+    ],
+    alarms: [
+      {
+        number: "1",
+        logic_variable: "RMS Voltage 1",
+        logic_operation: ">",
+        threshold: "1",
+        value: "alarm",
+      },
+      {
+        number: "2",
+        logic_variable: "c1p8",
+        logic_operation: "<",
+        threshold: "1",
+        value: "warning",
+      },
+      {
+        number: "3",
+        logic_variable: "c3p2",
+        logic_operation: "=",
+        threshold: "150",
+        value: "alarm",
+      },
+    ],
+  };
 
   //if inits has a non null value fetch the live data
   useEffect(() => {

@@ -79,223 +79,245 @@ function CardTab({ card, url }) {
 
   return (
     <Box>
-      <Box sx={{ fontWeight: "bold" }}>
-        This card is configured as a Digital {card?.type} Card
-      </Box>
-      <Box sx={{ border: "1px solid black", px: "10px" }}>
-        <Grid container spacing={4} sx={{ my: "10px" }}>
-          <Grid xs={5}>
-            <Box
+      <Box
+        sx={{
+          border: "1px solid grey",
+          padding: "0px !important",
+          mt: "50px",
+          borderRadius: "10px",
+          boxShadow: "-3px 4px 5px #afafaf",
+        }}
+      >
+        <Box
+          sx={{
+            fontWeight: "bold",
+            textAlign: "center",
+            my: "5px",
+          }}
+        >
+          This card is configured as a Digital {card?.type} Card
+        </Box>
+        <Box
+          sx={{
+            borderTop: "1px solid #afafaf",
+            borderBottom: "1px solid #afafaf",
+            px: "10px",
+          }}
+        >
+          <Grid container spacing={4} sx={{ my: "10px" }}>
+            <Grid xs={5}>
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  height: "100%",
+                  fontWeight: "bold",
+                  p: "5px",
+                  fontSize: "16px",
+                }}
+              >
+                Rename DIDO Port
+              </Box>
+            </Grid>
+            <Grid xs={2}>
+              <FormControl fullWidth>
+                <InputLabel id="demo-simple-select-label" size="small">
+                  port number
+                </InputLabel>
+                <Select
+                  size="small"
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  value={formData?.port_no}
+                  label="Network"
+                  onChange={(event) =>
+                    setFormData({
+                      ...formData,
+                      port_no: event.target.value,
+                    })
+                  }
+                >
+                  <MenuItem value={"1"}>1</MenuItem>
+                  <MenuItem value={"2"}>2</MenuItem>
+                  <MenuItem value={"3"}>3</MenuItem>
+                  <MenuItem value={"4"}>4</MenuItem>
+                  <MenuItem value={"5"}>5</MenuItem>
+                  <MenuItem value={"6"}>6</MenuItem>
+                  <MenuItem value={"7"}>7</MenuItem>
+                  <MenuItem value={"8"}>8</MenuItem>
+                </Select>
+              </FormControl>
+            </Grid>
+            <Grid xs={3} sx={{ px: "5px" }}>
+              <OutlinedInput
+                size="small"
+                value={formData.new_name}
+                onChange={(event) => {
+                  setFormData({
+                    ...formData,
+                    new_name: event.target.value,
+                  });
+                }}
+              />
+            </Grid>
+            <Grid xs={2}>
+              <Button onClick={onSubmit} variant="contained">
+                Apply
+              </Button>
+            </Grid>
+          </Grid>
+        </Box>
+        <Box sx={{ p: "10px" }}>
+          <Grid container spacing={2} sx={{ mb: "30px" }}>
+            <Grid
+              item
+              xs={2}
               sx={{
+                textAlign: "right",
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
-                height: "100%",
                 fontWeight: "bold",
-                p: "5px",
               }}
             >
-              Rename DIDO Port
-            </Box>
-          </Grid>
-          <Grid xs={1}>
-            <FormControl fullWidth>
-              <InputLabel id="demo-simple-select-label" size="small">
-                port number
-              </InputLabel>
-              <Select
-                size="small"
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                value={formData?.port_no}
-                label="Network"
-                onChange={(event) =>
-                  setFormData({
-                    ...formData,
-                    port_no: event.target.value,
-                  })
-                }
-              >
-                <MenuItem value={"1"}>1</MenuItem>
-                <MenuItem value={"2"}>2</MenuItem>
-                <MenuItem value={"3"}>3</MenuItem>
-                <MenuItem value={"4"}>4</MenuItem>
-                <MenuItem value={"5"}>5</MenuItem>
-                <MenuItem value={"6"}>6</MenuItem>
-                <MenuItem value={"7"}>7</MenuItem>
-                <MenuItem value={"8"}>8</MenuItem>
-              </Select>
-            </FormControl>
-          </Grid>
-          <Grid xs={4} sx={{ px: "5px" }}>
-            <OutlinedInput
-              size="small"
-              value={formData.new_name}
-              onChange={(event) => {
-                setFormData({
-                  ...formData,
-                  new_name: event.target.value,
-                });
+              Port
+            </Grid>
+            <Grid
+              item
+              xs={4}
+              sx={{
+                textAlign: "right",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                fontWeight: "bold",
               }}
-            />
-          </Grid>
-          <Grid xs={2}>
-            <Button onClick={onSubmit} variant="contained">
-              Apply
-            </Button>
-          </Grid>
-        </Grid>
-      </Box>
-      <Box sx={{ border: "1px solid black", p: "10px" }}>
-        <Grid container spacing={4}>
-          <Grid
-            item
-            xs={2}
-            sx={{
-              textAlign: "right",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              fontWeight: "bold",
-              mt: "10px",
-            }}
-          >
-            Port
-          </Grid>
-          <Grid
-            item
-            xs={4}
-            sx={{
-              textAlign: "right",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              fontWeight: "bold",
-            }}
-          >
-            Variable Name
-          </Grid>
-          <Grid
-            item
-            xs={4}
-            sx={{
-              textAlign: "right",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              fontWeight: "bold",
-            }}
-          >
-            Value
-          </Grid>
-          <Grid
-            item
-            xs={1}
-            sx={{
-              textAlign: "right",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              fontWeight: "bold",
-            }}
-          >
-            Control
-          </Grid>
-          {/* ------------------- */}
-          {card?.ports &&
-            card?.ports?.length > 0 &&
-            card?.ports?.map((port, index) => {
-              return (
-                <>
-                  <Grid
-                    item
-                    xs={2}
-                    sx={{
-                      textAlign: "right",
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      mt: "10px",
-                    }}
-                  >
-                    {`Port ${port.number}`}
-                  </Grid>
-                  <Grid
-                    item
-                    xs={4}
-                    sx={{
-                      textAlign: "right",
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                    }}
-                  >
-                    {port?.name || "---"}
-                  </Grid>
-                  <Grid
-                    item
-                    xs={4}
-                    sx={{
-                      textAlign: "right",
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                    }}
-                  >
-                    {port?.value || "---"}
-                  </Grid>
+            >
+              Variable Name
+            </Grid>
+            <Grid
+              item
+              xs={3}
+              sx={{
+                textAlign: "right",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                fontWeight: "bold",
+              }}
+            >
+              Value
+            </Grid>
+            <Grid
+              item
+              xs={2}
+              sx={{
+                textAlign: "right",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                fontWeight: "bold",
+              }}
+            >
+              Control
+            </Grid>
+            {/* ------------------- */}
+            {card?.ports &&
+              card?.ports?.length > 0 &&
+              card?.ports?.map((port, index) => {
+                return (
+                  <>
+                    <Grid
+                      item
+                      xs={2}
+                      sx={{
+                        textAlign: "right",
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        mt: "10px",
+                      }}
+                    >
+                      {`Port ${port.number}`}
+                    </Grid>
+                    <Grid
+                      item
+                      xs={4}
+                      sx={{
+                        textAlign: "right",
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                      }}
+                    >
+                      {port?.name || "---"}
+                    </Grid>
+                    <Grid
+                      item
+                      xs={3}
+                      sx={{
+                        textAlign: "right",
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                      }}
+                    >
+                      {port?.value || "---"}
+                    </Grid>
 
-                  <Grid
-                    item
-                    xs={1}
-                    sx={{
-                      textAlign: "right",
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                    }}
-                  >
-                    {card.type === "output" && (
-                      <>
-                        <Checkbox
-                          onChange={() => handleChange(port.number)}
-                        ></Checkbox>{" "}
-                        <span>Pulse Check</span>
-                      </>
-                    )}
-                  </Grid>
-                </>
-              );
-            })}
-          {/* ------------------- */}
-          {card.type === "output" && (
-            <>
-              <Grid item xs={8} sx={{}}></Grid>
+                    <Grid
+                      item
+                      xs={2}
+                      sx={{
+                        textAlign: "right",
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                      }}
+                    >
+                      {card.type === "output" && (
+                        <>
+                          <Checkbox
+                            onChange={() => handleChange(port.number)}
+                          ></Checkbox>{" "}
+                          <span style={{ fontSize: "10px" }}>Pulse Check</span>
+                        </>
+                      )}
+                    </Grid>
+                  </>
+                );
+              })}
+            {/* ------------------- */}
+            {card.type === "output" && (
+              <>
+                <Grid item xs={8} sx={{}}></Grid>
 
-              <Grid
-                item
-                xs={4}
-                sx={{
-                  textAlign: "right",
-                  display: "flex",
-                  justifyContent: "end",
-                  alignItems: "center",
-                  fontWeight: "bold",
-                }}
-              >
-                <Box sx={{}}>
-                  <Button
-                    onClick={onPulseSubmit}
-                    sx={{ mt: 2 }}
-                    variant="contained"
-                  >
-                    Send Pulse
-                  </Button>
-                </Box>
-              </Grid>
-            </>
-          )}
-        </Grid>
+                <Grid
+                  item
+                  xs={4}
+                  sx={{
+                    textAlign: "right",
+                    display: "flex",
+                    justifyContent: "end",
+                    alignItems: "center",
+                    fontWeight: "bold",
+                  }}
+                >
+                  <Box sx={{}}>
+                    <Button
+                      onClick={onPulseSubmit}
+                      sx={{ mt: 2 }}
+                      variant="contained"
+                    >
+                      Send Pulse
+                    </Button>
+                  </Box>
+                </Grid>
+              </>
+            )}
+          </Grid>
+        </Box>
       </Box>
     </Box>
   );

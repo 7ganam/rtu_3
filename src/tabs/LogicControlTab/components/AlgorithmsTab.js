@@ -24,7 +24,6 @@ function AlgorithmsTab({ algorithms, url, cards }) {
 
   const onSubmit = async () => {
     try {
-      console.log("algorithms :>> ", algorithms);
       const algorithmsNumers = algorithms.map((algorithm) => algorithm.number);
       const maxAlgorithmNumber = Math.max(...algorithmsNumers);
       const request = { number: maxAlgorithmNumber + 1, ...formData };
@@ -98,25 +97,33 @@ function AlgorithmsTab({ algorithms, url, cards }) {
   };
 
   return (
-    <Box>
-      <Box sx={{ border: "1px solid black" }}>
+    <Box
+      sx={{
+        border: "1px solid grey",
+        padding: "0px !important",
+        mt: "50px",
+        borderRadius: "10px",
+        boxShadow: "-3px 4px 5px #afafaf",
+      }}
+    >
+      <Box sx={{ border: "1px solid #afafaf" }}>
         <Grid container sx={{ my: "10px" }}>
-          <Grid xs={2} sx={{ textAlign: "center" }}>
+          <Grid xs={2} sx={{ textAlign: "center", fontSize: "15px" }}>
             Logic variable
           </Grid>
-          <Grid xs={2} sx={{ textAlign: "center" }}>
+          <Grid xs={2} sx={{ textAlign: "center", fontSize: "15px" }}>
             Logic Operation
           </Grid>
-          <Grid xs={2} sx={{ textAlign: "center" }}>
+          <Grid xs={2} sx={{ textAlign: "center", fontSize: "15px" }}>
             Threshold Value
           </Grid>
-          <Grid xs={2} sx={{ textAlign: "center" }}>
+          <Grid xs={2} sx={{ textAlign: "center", fontSize: "15px" }}>
             Action Value
           </Grid>
-          <Grid xs={2} sx={{ textAlign: "center" }}>
+          <Grid xs={2} sx={{ textAlign: "center", fontSize: "15px" }}>
             Action Port
           </Grid>
-          <Grid xs={2} sx={{ textAlign: "center" }}>
+          <Grid xs={2} sx={{ textAlign: "center", fontSize: "15px" }}>
             Action Type
           </Grid>
           {/* ------------------------------- */}
@@ -242,8 +249,8 @@ function AlgorithmsTab({ algorithms, url, cards }) {
             </FormControl>
           </Grid>
           {/* ------------------------------- */}
-          <Grid container>
-            <Grid xs={6}>
+          <Box sx={{ display: "flex", width: "100%" }}>
+            <Box>
               <Button
                 onClick={onSubmit}
                 sx={{ mt: 2, mx: "15px" }}
@@ -251,8 +258,25 @@ function AlgorithmsTab({ algorithms, url, cards }) {
               >
                 Generate Logic Function
               </Button>
-            </Grid>
-            <Grid xs={6}>
+            </Box>
+            <Box
+              sx={{
+                flexGrow: "1",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <div
+                style={{
+                  border: ".5px #afafaf solid",
+                  marginTop: "0px",
+                  height: "25px",
+                  marginTop: "10px",
+                }}
+              ></div>
+            </Box>
+            <Box sx={{ display: "flex", justifyContent: "end", mr: "20px" }}>
               <Box sx={{ display: "flex", mt: 2 }}>
                 <Button onClick={onDelete} variant="contained" color="error">
                   Delete Logic Function
@@ -266,11 +290,11 @@ function AlgorithmsTab({ algorithms, url, cards }) {
                   }}
                 />
               </Box>
-            </Grid>
-          </Grid>
+            </Box>
+          </Box>
         </Grid>
       </Box>
-      <Box sx={{ border: "1px solid black", p: "10px" }}>
+      <Box sx={{ border: "1px solid #afafaf", p: "10px", pb: "30px" }}>
         <Grid container>
           <Grid
             item
@@ -294,6 +318,7 @@ function AlgorithmsTab({ algorithms, url, cards }) {
               justifyContent: "center",
               alignItems: "center",
               fontWeight: "bold",
+              fontSize: "15px",
             }}
           >
             Logic Variable
@@ -307,6 +332,7 @@ function AlgorithmsTab({ algorithms, url, cards }) {
               justifyContent: "center",
               alignItems: "center",
               fontWeight: "bold",
+              fontSize: "15px",
             }}
           >
             Logic Operation
@@ -320,6 +346,7 @@ function AlgorithmsTab({ algorithms, url, cards }) {
               justifyContent: "center",
               alignItems: "center",
               fontWeight: "bold",
+              fontSize: "15px",
             }}
           >
             Threshold Value
@@ -333,6 +360,7 @@ function AlgorithmsTab({ algorithms, url, cards }) {
               justifyContent: "center",
               alignItems: "center",
               fontWeight: "bold",
+              fontSize: "15px",
             }}
           >
             Action Value
@@ -346,6 +374,7 @@ function AlgorithmsTab({ algorithms, url, cards }) {
               justifyContent: "center",
               alignItems: "center",
               fontWeight: "bold",
+              fontSize: "15px",
             }}
           >
             Action Port
@@ -354,11 +383,12 @@ function AlgorithmsTab({ algorithms, url, cards }) {
             item
             xs={1}
             sx={{
-              textAlign: "right",
+              textAlign: "center",
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
               fontWeight: "bold",
+              fontSize: "15px",
             }}
           >
             Action Type

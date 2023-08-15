@@ -97,8 +97,16 @@ function AlarmsTab({ alarms, url, cards }) {
   };
 
   return (
-    <Box>
-      <Box sx={{ border: "1px solid black" }}>
+    <Box
+      sx={{
+        border: "1px solid grey",
+        padding: "0px !important",
+        mt: "50px",
+        borderRadius: "10px",
+        boxShadow: "-3px 4px 5px #afafaf",
+      }}
+    >
+      <Box sx={{ border: "1px solid #afafaf" }}>
         <Grid container sx={{ my: "10px" }}>
           <Grid xs={2} sx={{ textAlign: "center" }}>
             Logic variable
@@ -176,8 +184,12 @@ function AlarmsTab({ alarms, url, cards }) {
           </Grid>
 
           <Grid xs={6}>
-            <FormControl sx={{ width: "80%", ml: "10px" }}>
-              <InputLabel id="demo-simple-select-label" size="small">
+            <FormControl sx={{ width: "90%", ml: "10px", mr: "10px" }}>
+              <InputLabel
+                id="demo-simple-select-label"
+                size="small"
+                sx={{ w: "100%" }}
+              >
                 Action Type
               </InputLabel>
               <Select
@@ -199,8 +211,8 @@ function AlarmsTab({ alarms, url, cards }) {
             </FormControl>
           </Grid>
           {/* ------------------------------- */}
-          <Grid container>
-            <Grid xs={6}>
+          <Box sx={{ display: "flex", width: "100%" }}>
+            <Box xs={6}>
               <Button
                 onClick={onSubmit}
                 sx={{ mt: 2, mx: "15px" }}
@@ -208,8 +220,25 @@ function AlarmsTab({ alarms, url, cards }) {
               >
                 Generate Logic Function
               </Button>
-            </Grid>
-            <Grid xs={6}>
+            </Box>
+            <Box
+              sx={{
+                flexGrow: "1",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <div
+                style={{
+                  border: ".5px #afafaf solid",
+                  marginTop: "0px",
+                  height: "25px",
+                  marginTop: "10px",
+                }}
+              ></div>
+            </Box>
+            <Box sx={{ display: "flex", justifyContent: "end", mr: "20px" }}>
               <Box sx={{ display: "flex", mt: 2 }}>
                 <Button onClick={onDelete} variant="contained" color="error">
                   Delete Logic Function
@@ -223,11 +252,11 @@ function AlarmsTab({ alarms, url, cards }) {
                   }}
                 />
               </Box>
-            </Grid>
-          </Grid>
+            </Box>
+          </Box>
         </Grid>
       </Box>
-      <Box sx={{ border: "1px solid black", p: "10px" }}>
+      <Box sx={{ border: "1px solid #afafaf", p: "10px", pb: "30px" }}>
         <Grid container>
           <Grid
             item

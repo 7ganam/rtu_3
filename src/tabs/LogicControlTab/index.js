@@ -1,22 +1,21 @@
 import * as React from "react";
-import { useState, useEffect } from "react";
-// ** MUI Imports
-import OutlinedInput from "@mui/material/OutlinedInput";
-import Box from "@mui/material/Box";
-import Grid from "@mui/material/Grid";
 
+import Select, { SelectChangeEvent } from "@mui/material/Select";
+import { useEffect, useState } from "react";
+
+import AlarmsTab from "./components/AlarmsTab";
+import AlgorithmsTab from "./components/AlgorithmsTab";
+import Box from "@mui/material/Box";
+import CardTab from "./components/CardTab";
+import FormControl from "@mui/material/FormControl";
+import Grid from "@mui/material/Grid";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import Select, { SelectChangeEvent } from "@mui/material/Select";
-import Typography from "@mui/material/Typography";
-
-import Tabs from "@mui/material/Tabs";
+// ** MUI Imports
+import OutlinedInput from "@mui/material/OutlinedInput";
 import Tab from "@mui/material/Tab";
-
-import CardTab from "./components/CardTab";
-import AlgorithmsTab from "./components/AlgorithmsTab";
-import AlarmsTab from "./components/AlarmsTab";
+import Tabs from "@mui/material/Tabs";
+import Typography from "@mui/material/Typography";
 import axios from "axios";
 
 function TabPanel(props) {
@@ -61,7 +60,7 @@ const ConfigTab = ({ liveData, url }) => {
     <Box sx={{ width: "100%", padding: "20px" }}>
       <Grid container spacing={2}>
         {/* ------------------------------------- */}
-        <Grid item xs={12} md={8}>
+        <Grid item xs={12} lg={7}>
           <Box sx={{ width: "100%" }}>
             <Box sx={{ borderBottom: 2, borderColor: "divider" }}>
               <Tabs
@@ -97,7 +96,7 @@ const ConfigTab = ({ liveData, url }) => {
           </Box>
         </Grid>
         {/* ------------------------------------ */}
-        <Grid item xs={12} md={4}>
+        <Grid item xs={12} lg={5}>
           <Box sx={{ width: "100%" }}>
             <Box sx={{ borderBottom: 2, borderColor: "divider" }}>
               <Tabs
