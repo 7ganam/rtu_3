@@ -29,13 +29,36 @@ export function useLiveData() {
           ...dido1.data,
           ...dido2.data,
         };
+
+        //remove all nulls from dido object
+        for (const [key, value] of Object.entries(dido)) {
+          if (value === null) {
+            delete dido[key];
+          }
+        }
+
         const algorithms1 = await axios.get(url + "algorithms/1");
         const algorithms2 = await axios.get(url + "algorithms/2");
         const algorithms = {
           ...algorithms1.data,
           ...algorithms2.data,
         };
+
+        //remove all nulls from algorithms object
+        for (const [key, value] of Object.entries(algorithms)) {
+          if (value === null) {
+            delete algorithms[key];
+          }
+        }
+
         const alarms = await axios.get(url + "alarms");
+
+        for (const [key, value] of Object.entries(alarms)) {
+          if (value === null) {
+            delete alarms[key];
+          }
+        }
+
         const result = {
           ...staticDynamic.data,
           ...dido,
@@ -62,7 +85,7 @@ export function useLiveData() {
       if (startFetching) {
         fetchData();
       }
-    }, 3000); // send requests every 3 seconds until response is received
+    }, 10000); // send requests every 3 seconds until response is received
 
     return () => {
       isMounted = false;
