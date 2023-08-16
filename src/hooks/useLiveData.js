@@ -49,10 +49,7 @@ export function useLiveData() {
             delete algorithms2Data[key];
           }
         }
-        const algorithms = {
-          algorithms1Data,
-          algorithms2Data,
-        };
+        const algorithms = [...algorithms1Data, ...algorithms2Data];
 
         console.log("algorithms :>> ", algorithms);
 
