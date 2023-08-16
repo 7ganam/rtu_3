@@ -30,19 +30,7 @@ export function useLiveData() {
           ...dido2.data,
         };
 
-        //remove all nulls from dido object
-        for (const [key, value] of Object.entries(dido)) {
-          if (value === null) {
-            delete dido[key];
-          }
-        }
-
-        //remove all nulls from dido.dido_cards array
-        for (const [key, value] of Object.entries(dido.dido_cards)) {
-          if (value === null) {
-            delete dido.dido_cards[key];
-          }
-        }
+        console.log("dido :>> ", dido);
 
         const algorithms1 = await axios.get(url + "algorithms/1");
         const algorithms2 = await axios.get(url + "algorithms/2");
@@ -66,20 +54,11 @@ export function useLiveData() {
           algorithms2Data,
         };
 
-        //remove all nulls from algorithms object
-        for (const [key, value] of Object.entries(algorithms)) {
-          if (value === null) {
-            delete algorithms[key];
-          }
-        }
+        console.log("algorithms :>> ", algorithms);
 
         const alarms = await axios.get(url + "alarms");
 
-        for (const [key, value] of Object.entries(alarms)) {
-          if (value === null) {
-            delete alarms[key];
-          }
-        }
+        console.log("alarms :>> ", alarms);
 
         const result = {
           ...staticDynamic.data,
@@ -87,8 +66,9 @@ export function useLiveData() {
           ...algorithms,
           ...alarms.data,
         };
-        // const result = await axios.get(url);
-        // console.log("result :>> ", result);
+
+        console.log("result :>> ", result);
+
         if (isMounted) {
           setData(result);
           // clearInterval(intervalId);
@@ -97,6 +77,7 @@ export function useLiveData() {
         }
       } catch (err) {
         setError(err);
+        console.log("err :>> ", err);
         // clearInterval(intervalId);
         // setStartFetching(false);
         // setLoading(false);
