@@ -25,6 +25,7 @@ export function useLiveData() {
         const staticDynamic = await axios.get(url + "static-dynamic");
         const dido1 = await axios.get(url + "dido/1");
         const dido2 = await axios.get(url + "dido/2");
+
         const dido = {
           ...dido1.data,
           ...dido2.data,
@@ -60,7 +61,7 @@ export function useLiveData() {
         const result = {
           ...staticDynamic.data,
           ...dido,
-          ...algorithms,
+          algorithms: algorithms,
           ...alarms.data,
         };
 
