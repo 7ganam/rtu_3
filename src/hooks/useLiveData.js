@@ -89,7 +89,7 @@ export function useLiveData() {
         const result = {
           static: staticDynamicData.static,
           dynamic: staticDynamicData.dynamic,
-          dido: dido,
+          dido_cards: dido,
           algorithms: algorithms,
           ...alarms.data,
         };
