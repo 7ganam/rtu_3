@@ -23,13 +23,39 @@ export function useLiveData() {
     const fetchData = async () => {
       try {
         const staticDynamic = await axios.get(url + "static-dynamic");
+        let staticDynamicData = staticDynamic.data;
+
+        const nonNullDynamic = staticDynamicData.dynamic.filter(
+          (item) => item !== null
+        );
+
+        staticDynamicData.dynamic = nonNullDynamic;
+
         const dido1 = await axios.get(url + "dido/1");
         const dido2 = await axios.get(url + "dido/2");
 
-        const dido = {
-          ...dido1.data,
-          ...dido2.data,
-        };
+        const dido1Data = dido1.data.dido_cards;
+        const dido2Data = dido2.data.dido_cards;
+
+        for (const [key, value] of Object.entries(dido1Data)) {
+          if (value === null) {
+            delete dido1Data.dido[key];
+          }
+        }
+
+        for (const [key, value] of Object.entries(dido2Data)) {
+          if (value === null) {
+            delete dido2Data[key];
+          }
+        }
+        let dido = [...dido1Data, ...dido2Data];
+
+        dido = dido.filter((item) => item !== undefined);
+
+        // const dido = {
+        //   ...dido1.data,
+        //   ...dido2.data,
+        // };
 
         console.log("dido :>> ", dido);
 
@@ -50,17 +76,20 @@ export function useLiveData() {
             delete algorithms2Data[key];
           }
         }
-        const algorithms = [...algorithms1Data, ...algorithms2Data];
 
-        console.log("algorithms :>> ", algorithms);
+        let algorithms = [...algorithms1Data, ...algorithms2Data];
+
+        // remove undefined from array
+        algorithms = algorithms.filter((item) => item !== undefined);
 
         const alarms = await axios.get(url + "alarms");
 
         console.log("alarms :>> ", alarms);
 
         const result = {
-          ...staticDynamic.data,
-          ...dido,
+          static: staticDynamicData.static,
+          dynamic: staticDynamicData.dynamic,
+          dido: dido,
           algorithms: algorithms,
           ...alarms.data,
         };
@@ -86,7 +115,7 @@ export function useLiveData() {
       if (startFetching) {
         fetchData();
       }
-    }, 10000); // send requests every 3 seconds until response is received
+    }, 3000); // send requests every 3 seconds until response is received
 
     return () => {
       isMounted = false;
