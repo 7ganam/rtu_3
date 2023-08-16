@@ -37,11 +37,33 @@ export function useLiveData() {
           }
         }
 
+        //remove all nulls from dido.dido_cards array
+        for (const [key, value] of Object.entries(dido.dido_cards)) {
+          if (value === null) {
+            delete dido.dido_cards[key];
+          }
+        }
+
         const algorithms1 = await axios.get(url + "algorithms/1");
         const algorithms2 = await axios.get(url + "algorithms/2");
+
+        const algorithms1Data = algorithms1.data.algorithms;
+        const algorithms2Data = algorithms2.data.algorithms;
+
+        for (const [key, value] of Object.entries(algorithms1Data)) {
+          if (value === null) {
+            delete algorithms1Data.algorithms[key];
+          }
+        }
+
+        for (const [key, value] of Object.entries(algorithms2Data)) {
+          if (value === null) {
+            delete algorithms2Data[key];
+          }
+        }
         const algorithms = {
-          ...algorithms1.data,
-          ...algorithms2.data,
+          algorithms1Data,
+          algorithms2Data,
         };
 
         //remove all nulls from algorithms object
