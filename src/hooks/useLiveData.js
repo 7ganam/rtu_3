@@ -63,10 +63,10 @@ export function useLiveData() {
         let algorithms1Data = [];
         let algorithms2Data = [];
 
-        if (algorithms1.data?.algorithms) {
+        if (algorithms1?.data?.algorithms) {
           algorithms1Data = algorithms1.data.algorithms;
         }
-        if (algorithms2.data?.algorithms) {
+        if (algorithms2?.data?.algorithms) {
           algorithms2Data = algorithms2.data.algorithms;
         }
 
