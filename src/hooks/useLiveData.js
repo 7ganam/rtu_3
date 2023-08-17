@@ -31,6 +31,15 @@ export function useLiveData() {
 
         staticDynamicData.dynamic = nonNullDynamic;
 
+        let newData = {
+          ...data,
+          static: staticDynamicData.static,
+          dynamic: staticDynamicData.dynamic,
+        };
+        if (isMounted) {
+          setData(newData);
+        }
+
         const dido1 = await axios.get(url + "dido/1");
         const dido2 = await axios.get(url + "dido/2");
 
@@ -53,10 +62,13 @@ export function useLiveData() {
         // remove untruthy values from array
         dido = dido.filter((item) => !!item);
 
-        // const dido = {
-        //   ...dido1.data,
-        //   ...dido2.data,
-        // };
+        newData = {
+          ...data,
+          dido_cards: dido,
+        };
+        if (isMounted) {
+          setData(newData);
+        }
 
         const algorithms1 = await axios.get(url + "algorithms/1");
         const algorithms2 = await axios.get(url + "algorithms/2");
@@ -76,25 +88,41 @@ export function useLiveData() {
         // remove untruthy values from array
         algorithms = algorithms.filter((item) => !!item);
 
+        newData = {
+          ...data,
+          algorithms: algorithms,
+        };
+        if (isMounted) {
+          setData(newData);
+        }
+
         const alarms = await axios.get(url + "alarms");
 
         let alarmsData = alarms?.data?.alarms ?? [];
         alarmsData = alarmsData.filter((item) => !!item);
 
-        const result = {
-          static: staticDynamicData.static,
-          dynamic: staticDynamicData.dynamic,
-          dido_cards: dido,
-          algorithms: algorithms,
+        newData = {
+          ...data,
           alarms: alarmsData,
         };
-
         if (isMounted) {
-          setData(result);
-          // clearInterval(intervalId);
-          // setStartFetching(false);
-          // setLoading(false);
+          setData(newData);
         }
+
+        // const result = {
+        //   static: staticDynamicData.static,
+        //   dynamic: staticDynamicData.dynamic,
+        //   dido_cards: dido,
+        //   algorithms: algorithms,
+        //   alarms: alarmsData,
+        // };
+
+        // if (isMounted) {
+        //   setData(result);
+        //   // clearInterval(intervalId);
+        //   // setStartFetching(false);
+        //   // setLoading(false);
+        // }
       } catch (err) {
         setError(err);
         console.log("err :>> ", err);
