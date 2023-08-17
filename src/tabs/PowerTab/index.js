@@ -59,9 +59,6 @@ const PowerTab = ({ liveData, url }) => {
   };
 
   function renderDynamicRows(liveData) {
-    if (!liveData?.dynamic) return <></>;
-    if (liveData?.dynamic?.length === 0) return <></>;
-
     return (
       <Grid container spacing={3}>
         <>
@@ -479,7 +476,7 @@ const PowerTab = ({ liveData, url }) => {
 
   return (
     <Box sx={{ width: "90%", padding: "20px", m: "auto" }}>
-      {liveData?.dynamic && liveData?.dynamic?.length !== 0 ? (
+      {liveData?.static && liveData?.static?.length !== 0 ? (
         <Grid container spacing={4}>
           {/* ------------------------------------- */}
           <Grid
