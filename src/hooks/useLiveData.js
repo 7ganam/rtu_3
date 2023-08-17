@@ -78,12 +78,15 @@ export function useLiveData() {
 
         const alarms = await axios.get(url + "alarms");
 
+        let alarmsData = alarms?.data?.alarms ?? [];
+        alarmsData = alarmsData.filter((item) => !!item);
+
         const result = {
           static: staticDynamicData.static,
           dynamic: staticDynamicData.dynamic,
           dido_cards: dido,
           algorithms: algorithms,
-          alarms: alarms.data.alarms ?? [],
+          alarms: alarmsData,
         };
 
         if (isMounted) {
