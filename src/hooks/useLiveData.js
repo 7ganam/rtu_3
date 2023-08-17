@@ -57,13 +57,18 @@ export function useLiveData() {
         //   ...dido2.data,
         // };
 
-        console.log("dido :>> ", dido);
-
         const algorithms1 = await axios.get(url + "algorithms/1");
         const algorithms2 = await axios.get(url + "algorithms/2");
 
-        const algorithms1Data = algorithms1.data.algorithms;
-        const algorithms2Data = algorithms2.data.algorithms;
+        let algorithms1Data = [];
+        let algorithms2Data = [];
+
+        if (algorithms1.data?.algorithms) {
+          algorithms1Data = algorithms1.data.algorithms;
+        }
+        if (algorithms2.data?.algorithms) {
+          algorithms2Data = algorithms2.data.algorithms;
+        }
 
         for (const [key, value] of Object.entries(algorithms1Data)) {
           if (value === null) {
@@ -84,17 +89,13 @@ export function useLiveData() {
 
         const alarms = await axios.get(url + "alarms");
 
-        console.log("alarms :>> ", alarms);
-
         const result = {
           static: staticDynamicData.static,
           dynamic: staticDynamicData.dynamic,
           dido_cards: dido,
           algorithms: algorithms,
-          ...alarms.data,
+          alarms: alarms.data.alarms ?? [],
         };
-
-        console.log("result :>> ", result);
 
         if (isMounted) {
           setData(result);

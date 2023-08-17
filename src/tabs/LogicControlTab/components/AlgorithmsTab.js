@@ -24,8 +24,12 @@ function AlgorithmsTab({ algorithms, url, cards }) {
 
   const onSubmit = async () => {
     try {
-      const algorithmsNumers = algorithms.map((algorithm) => algorithm.number);
+      let algorithmsNumers = algorithms.map((algorithm) => algorithm.number);
+      algorithmsNumers = algorithmsNumers.length === 0 ? [0] : algorithmsNumers;
+      console.log("algorithmsNumers :>> ", algorithmsNumers);
       const maxAlgorithmNumber = Math.max(...algorithmsNumers);
+      console.log("maxAlgorithmNumber :>> ", maxAlgorithmNumber);
+
       const request = { number: maxAlgorithmNumber + 1, ...formData };
       console.log("request :>> ", request);
       const response = await axios.post(url + "create-logic-function", {

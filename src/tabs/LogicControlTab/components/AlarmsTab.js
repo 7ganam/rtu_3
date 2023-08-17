@@ -23,8 +23,9 @@ function AlarmsTab({ alarms, url, cards }) {
   const [formData, setFormData] = useState({});
 
   const onSubmit = async () => {
-    console.log("alarms :>> ", alarms);
-    const alarmsNumers = alarms.map((algorithm) => algorithm.number);
+    let alarmsNumers = alarms.map((alarm) => alarm.number);
+    alarmsNumers = alarmsNumers.length === 0 ? [0] : alarmsNumers;
+
     const maxAlarmsNumber = Math.max(...alarmsNumers);
     const request = { number: maxAlarmsNumber + 1, ...formData };
     console.log("request :>> ", request);

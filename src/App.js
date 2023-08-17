@@ -58,7 +58,7 @@ const HomeView = () => {
   const [inits, error, startInit, loadingInit] = useInit();
 
   const [liveData, liveDataError, startLiveData] = useLiveData();
-  console.log("liveData :>> ", liveData);
+  // console.log("liveData :>> ", liveData);
 
   // const liveData = {
   //   static: {
