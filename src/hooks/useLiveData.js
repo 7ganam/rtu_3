@@ -50,7 +50,8 @@ export function useLiveData() {
         }
         let dido = [...dido1Data, ...dido2Data];
 
-        dido = dido.filter((item) => item !== undefined);
+        // remove untruthy values from array
+        dido = dido.filter((item) => !!item);
 
         // const dido = {
         //   ...dido1.data,
@@ -70,22 +71,10 @@ export function useLiveData() {
           algorithms2Data = algorithms2.data.algorithms;
         }
 
-        for (const [key, value] of Object.entries(algorithms1Data)) {
-          if (value === null) {
-            delete algorithms1Data.algorithms[key];
-          }
-        }
-
-        for (const [key, value] of Object.entries(algorithms2Data)) {
-          if (value === null) {
-            delete algorithms2Data[key];
-          }
-        }
-
         let algorithms = [...algorithms1Data, ...algorithms2Data];
 
-        // remove undefined from array
-        algorithms = algorithms.filter((item) => item !== undefined);
+        // remove untruthy values from array
+        algorithms = algorithms.filter((item) => !!item);
 
         const alarms = await axios.get(url + "alarms");
 
