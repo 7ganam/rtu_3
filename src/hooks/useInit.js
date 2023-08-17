@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
+
 import axios from "axios";
 
 export function useInit() {
@@ -22,7 +23,6 @@ export function useInit() {
     const fetchData = async () => {
       try {
         const result = await axios.get(url);
-        console.log("result :>> ", result);
         if (isMounted) {
           setData(result.data);
           clearInterval(intervalId);

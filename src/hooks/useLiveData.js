@@ -31,14 +31,13 @@ export function useLiveData() {
 
         staticDynamicData.dynamic = nonNullDynamic;
 
-        let newData = {
-          ...data,
-          static: staticDynamicData.static,
-          dynamic: staticDynamicData.dynamic,
-        };
-        if (isMounted) {
-          setData(newData);
-        }
+        setData((prevData) => {
+          return {
+            ...prevData,
+            static: staticDynamicData.static,
+            dynamic: staticDynamicData.dynamic,
+          };
+        });
 
         const dido1 = await axios.get(url + "dido/1");
         const dido2 = await axios.get(url + "dido/2");
@@ -62,13 +61,12 @@ export function useLiveData() {
         // remove untruthy values from array
         dido = dido.filter((item) => !!item);
 
-        newData = {
-          ...data,
-          dido_cards: dido,
-        };
-        if (isMounted) {
-          setData(newData);
-        }
+        setData((prevData) => {
+          return {
+            ...prevData,
+            dido_cards: dido,
+          };
+        });
 
         const algorithms1 = await axios.get(url + "algorithms/1");
         const algorithms2 = await axios.get(url + "algorithms/2");
@@ -88,26 +86,24 @@ export function useLiveData() {
         // remove untruthy values from array
         algorithms = algorithms.filter((item) => !!item);
 
-        newData = {
-          ...data,
-          algorithms: algorithms,
-        };
-        if (isMounted) {
-          setData(newData);
-        }
+        setData((prevData) => {
+          return {
+            ...prevData,
+            algorithms: algorithms,
+          };
+        });
 
         const alarms = await axios.get(url + "alarms");
 
         let alarmsData = alarms?.data?.alarms ?? [];
         alarmsData = alarmsData.filter((item) => !!item);
 
-        newData = {
-          ...data,
-          alarms: alarmsData,
-        };
-        if (isMounted) {
-          setData(newData);
-        }
+        setData((prevData) => {
+          return {
+            ...prevData,
+            alarms: alarmsData,
+          };
+        });
 
         // const result = {
         //   static: staticDynamicData.static,
