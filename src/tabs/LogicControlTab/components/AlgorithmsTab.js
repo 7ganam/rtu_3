@@ -11,9 +11,10 @@ import MenuItem from "@mui/material/MenuItem";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import React from "react";
 import axios from "axios";
+import mqttPost from "../../../utils/mqttPost";
 import { useForm } from "react-hook-form";
 
-function AlgorithmsTab({ algorithms, url, cards }) {
+function AlgorithmsTab({ algorithms, url, cards, mode, mqttClient }) {
   const {
     register,
     handleSubmit,
@@ -23,20 +24,27 @@ function AlgorithmsTab({ algorithms, url, cards }) {
   const [formData, setFormData] = useState({});
 
   const onSubmit = async () => {
-    try {
-      let algorithmsNumers = algorithms.map((algorithm) => algorithm.number);
-      algorithmsNumers = algorithmsNumers.length === 0 ? [0] : algorithmsNumers;
-      console.log("algorithmsNumers :>> ", algorithmsNumers);
-      const maxAlgorithmNumber = Math.max(...algorithmsNumers);
-      console.log("maxAlgorithmNumber :>> ", maxAlgorithmNumber);
-
-      const request = { number: maxAlgorithmNumber + 1, ...formData };
-      console.log("request :>> ", request);
-      const response = await axios.post(url + "create-logic-function", {
-        ...request,
-      });
-    } catch (error) {
-      console.error(error);
+    let algorithmsNumers = algorithms.map((algorithm) => algorithm.number);
+    algorithmsNumers = algorithmsNumers.length === 0 ? [0] : algorithmsNumers;
+    const maxAlgorithmNumber = Math.max(...algorithmsNumers);
+    const request = { number: maxAlgorithmNumber + 1, ...formData };
+    console.log("request :>> ", request);
+    if (mode === "local") {
+      try {
+        const response = await axios.post(url + "create-logic-function", {
+          ...request,
+        });
+      } catch (error) {
+        console.error(error);
+      }
+    } else if (mode === "remote") {
+      mqttPost(
+        mqttClient,
+        "/create-logic-function",
+        "/create-logic-function/response",
+        request,
+        () => {}
+      );
     }
   };
 
@@ -89,14 +97,23 @@ function AlgorithmsTab({ algorithms, url, cards }) {
   };
 
   const [deleteValue, setDeleteValue] = useState();
-
   const onDelete = async () => {
-    try {
-      const response = await axios.post(url + "delete-logic-function", {
-        deleteValue,
-      });
-    } catch (error) {
-      console.error(error);
+    if (mode === "local") {
+      try {
+        const response = await axios.post(url + "delete-logic-function", {
+          deleteValue,
+        });
+      } catch (error) {
+        console.error(error);
+      }
+    } else if (mode === "remote") {
+      mqttPost(
+        mqttClient,
+        "/delete-logic-function",
+        "/delete-logic-function/response",
+        { deleteValue: deleteValue },
+        () => {}
+      );
     }
   };
 

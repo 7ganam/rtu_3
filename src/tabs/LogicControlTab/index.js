@@ -45,7 +45,7 @@ function a11yProps(index) {
   };
 }
 
-const ConfigTab = ({ liveData, url }) => {
+const ConfigTab = ({ liveData, url, mode, mqttClient }) => {
   const [displaysTabValue, setDisplaysTabValue] = React.useState(0);
   const handleDisplaysTabChange = (event, newValue) => {
     setDisplaysTabValue(newValue);
@@ -81,6 +81,8 @@ const ConfigTab = ({ liveData, url }) => {
                   cards={liveData?.dido_cards}
                   algorithms={liveData?.algorithms}
                   url={url}
+                  mode={mode}
+                  mqttClient={mqttClient}
                 />
               )}
             </TabPanel>
@@ -90,6 +92,8 @@ const ConfigTab = ({ liveData, url }) => {
                   cards={liveData?.dido_cards}
                   alarms={liveData?.alarms}
                   url={url}
+                  mode={mode}
+                  mqttClient={mqttClient}
                 />
               )}
             </TabPanel>
@@ -125,7 +129,12 @@ const ConfigTab = ({ liveData, url }) => {
               liveData.dido_cards.map((item, index) => {
                 return (
                   <TabPanel value={displaysTabValue} index={index}>
-                    <CardTab card={item} url={url} />
+                    <CardTab
+                      card={item}
+                      url={url}
+                      mode={mode}
+                      mqttClient={mqttClient}
+                    />
                   </TabPanel>
                 );
               })}

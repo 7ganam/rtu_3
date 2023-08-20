@@ -1,28 +1,33 @@
 import * as React from "react";
-import { useState, useEffect } from "react";
-// ** MUI Imports
-import OutlinedInput from "@mui/material/OutlinedInput";
-import Box from "@mui/material/Box";
-import Grid from "@mui/material/Grid";
-import Button from "@mui/material/Button";
-import TextField from "@mui/material/TextField";
-import CircularProgress from "@mui/material/CircularProgress";
 
+import Select, { SelectChangeEvent } from "@mui/material/Select";
+import { useEffect, useState } from "react";
+
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import CircularProgress from "@mui/material/CircularProgress";
+import FormControl from "@mui/material/FormControl";
+import Grid from "@mui/material/Grid";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import Select, { SelectChangeEvent } from "@mui/material/Select";
-
+// ** MUI Imports
+import OutlinedInput from "@mui/material/OutlinedInput";
+import TextField from "@mui/material/TextField";
 import axios from "axios";
+import mqttPost from "../../utils/mqttPost";
 
-const ConfigTab = ({ initConfigs, url }) => {
+const ConfigTab = ({ initConfigs, url, mode, mqttClient }) => {
   const onSubmit = async () => {
     if (!initConfigs) return; // if no initConfigs, do nothing
-    try {
-      const response = await axios.post(url + "config", formData);
-      console.log(response.data);
-    } catch (error) {
-      console.error(error);
+    if (mode === "local") {
+      try {
+        const response = await axios.post(url + "config", formData);
+        console.log(response.data);
+      } catch (error) {
+        console.error(error);
+      }
+    } else if (mode === "remote") {
+      mqttPost(mqttClient, "/config", "/config/response", formData, () => {});
     }
   };
 

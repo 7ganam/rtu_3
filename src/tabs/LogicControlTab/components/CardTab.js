@@ -11,9 +11,10 @@ import MenuItem from "@mui/material/MenuItem";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import React from "react";
 import axios from "axios";
+import mqttPost from "../../../utils/mqttPost";
 import { useForm } from "react-hook-form";
 
-function CardTab({ card, url }) {
+function CardTab({ card, url, mode, mqttClient }) {
   const [checked, setChecked] = React.useState([]);
 
   const handleChange = (portNumber) => {
@@ -47,10 +48,20 @@ function CardTab({ card, url }) {
       ports_decimal: parseInt(generateBinaryString(), 2),
     };
     console.log(data);
-    try {
-      const response = await axios.post(url + "create-pulse", data);
-    } catch (error) {
-      console.error(error);
+    if (mode === "local") {
+      try {
+        const response = await axios.post(url + "create-pulse", data);
+      } catch (error) {
+        console.error(error);
+      }
+    } else if (mode === "remote") {
+      mqttPost(
+        mqttClient,
+        "/create-pulse",
+        "/create-pulse/response",
+        data,
+        () => {}
+      );
     }
   };
 
@@ -66,14 +77,27 @@ function CardTab({ card, url }) {
   });
 
   const onSubmit = async () => {
-    try {
-      const response = await axios.post(url + "change-port-name", {
-        ...formData,
-        card_no: card.number,
-      });
-      console.log(response.data);
-    } catch (error) {
-      console.error(error);
+    if (mode === "local") {
+      try {
+        const response = await axios.post(url + "change-port-name", {
+          ...formData,
+          card_no: card.number,
+        });
+        console.log(response.data);
+      } catch (error) {
+        console.error(error);
+      }
+    } else if (mode === "remote") {
+      mqttPost(
+        mqttClient,
+        "/change-port-name",
+        "/change-port-name/response",
+        {
+          ...formData,
+          card_no: card.number,
+        },
+        () => {}
+      );
     }
   };
 

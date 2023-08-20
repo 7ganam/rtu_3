@@ -11,9 +11,10 @@ import MenuItem from "@mui/material/MenuItem";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import React from "react";
 import axios from "axios";
+import mqttPost from "../../../utils/mqttPost";
 import { useForm } from "react-hook-form";
 
-function AlarmsTab({ alarms, url, cards }) {
+function AlarmsTab({ alarms, url, cards, mode, mqttClient }) {
   const {
     register,
     handleSubmit,
@@ -29,12 +30,22 @@ function AlarmsTab({ alarms, url, cards }) {
     const maxAlarmsNumber = Math.max(...alarmsNumers);
     const request = { number: maxAlarmsNumber + 1, ...formData };
     console.log("request :>> ", request);
-    try {
-      const response = await axios.post(url + "create-alarm-function", {
-        ...request,
-      });
-    } catch (error) {
-      console.error(error);
+    if (mode === "local") {
+      try {
+        const response = await axios.post(url + "create-alarm-function", {
+          ...request,
+        });
+      } catch (error) {
+        console.error(error);
+      }
+    } else if (mode === "remote") {
+      mqttPost(
+        mqttClient,
+        "/create-alarm-function",
+        "/create-alarm-function/response",
+        request,
+        () => {}
+      );
     }
   };
 
@@ -88,12 +99,22 @@ function AlarmsTab({ alarms, url, cards }) {
 
   const [deleteValue, setDeleteValue] = useState();
   const onDelete = async () => {
-    try {
-      const response = await axios.post(url + "delete-alarm-function", {
-        deleteValue,
-      });
-    } catch (error) {
-      console.error(error);
+    if (mode === "local") {
+      try {
+        const response = await axios.post(url + "delete-alarm-function", {
+          deleteValue,
+        });
+      } catch (error) {
+        console.error(error);
+      }
+    } else if (mode === "remote") {
+      mqttPost(
+        mqttClient,
+        "/delete-alarm-function",
+        "/delete-alarm-function/response",
+        { deleteValue: deleteValue },
+        () => {}
+      );
     }
   };
 

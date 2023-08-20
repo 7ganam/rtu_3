@@ -8,6 +8,7 @@ import Grid from "@mui/material/Grid";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import TextField from "@mui/material/TextField";
 import axios from "axios";
+import mqttPost from "../../../utils/mqttPost";
 import { useForm } from "react-hook-form";
 
 function AddAddressForm({
@@ -17,6 +18,8 @@ function AddAddressForm({
   url,
   dynamicData,
   setAllowFormInput,
+  mode,
+  mqttClient,
 }) {
   const {
     register,
@@ -45,14 +48,26 @@ function AddAddressForm({
     const request = { count: newData.length, data: newData };
     console.log("request :>> ", request);
     setFormLoading(true);
-    try {
-      const response = await axios.post(url + "add-address", request);
-      console.log(response.data);
-      setFormLoading(false);
-      setAllowFormInput(false);
-    } catch (error) {
-      setFormLoading(false);
-      console.error(error);
+    if (mode === "local") {
+      try {
+        const response = await axios.post(url + "add-address", request);
+        console.log(response.data);
+        setFormLoading(false);
+        setAllowFormInput(false);
+      } catch (error) {
+        setFormLoading(false);
+        console.error(error);
+      }
+    } else if (mode === "remote") {
+      mqttPost(
+        mqttClient,
+        "/add-address",
+        "/add-address/response",
+        request,
+        () => {
+          setFormLoading(false);
+        }
+      );
     }
   };
 

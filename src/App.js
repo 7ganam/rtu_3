@@ -7,14 +7,19 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardHeader from "@mui/material/CardHeader";
 import ConfigTab from "./tabs/ConfigTab";
+import FormControl from "@mui/material/FormControl";
 import Grid from "@mui/material/Grid";
+import InputLabel from "@mui/material/InputLabel";
 import LogicControlTab from "./tabs/LogicControlTab";
+import MenuItem from "@mui/material/MenuItem";
 // import ChartsTab from "./components/tabs/ChartsTab";
 import PowerTab from "./tabs/PowerTab";
+import Select from "@mui/material/Select";
 import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
+import mqtt from "mqtt";
 import { useInit } from "./hooks/useInit";
 import { useLiveData } from "./hooks/useLiveData";
 
@@ -53,11 +58,47 @@ const HomeView = () => {
     setValue(newValue);
   };
 
+  const [mode, setMode] = React.useState("local");
+  const handleModeChange = (event) => {
+    setMode(event.target.value);
+  };
+
+  const clientRef = useRef(null);
+  useEffect(() => {
+    //connect to mqtt broker and save client in ref
+    const url =
+      "ws://ec2-54-93-216-161.eu-central-1.compute.amazonaws.com:8000";
+    const newClient = mqtt.connect(url);
+    clientRef.current = newClient;
+
+    newClient.on("connect", function () {
+      console.log("connected  " + newClient.connected);
+    });
+    newClient.on("error", function (error) {
+      console.log("Can't connect" + error);
+    });
+
+    //disconnect when component unmounts
+    return () => {
+      if (clientRef.current) {
+        clientRef.current.end();
+        clientRef.current = null;
+      }
+    };
+  }, []);
+
   const [inputIP, setInputIp] = useState("http://localhost:5000/");
 
-  const [inits, error, startInit, loadingInit] = useInit();
+  const [inits, error, startInit, loadingInit] = useInit(
+    mode,
+    clientRef.current
+  );
 
-  const [liveData, liveDataError, startLiveData] = useLiveData();
+  const [liveData, liveDataError, startLiveData] = useLiveData(
+    mode,
+    clientRef.current
+  );
+
   // console.log("liveData :>> ", liveData);
 
   // const liveData = {
@@ -210,6 +251,7 @@ const HomeView = () => {
   // };
 
   //if inits has a non null value fetch the live data
+
   useEffect(() => {
     if (inits !== null) {
       startLiveData(inputIP);
@@ -250,6 +292,23 @@ const HomeView = () => {
                   setInputIp(event.target.value);
                 }}
               />
+
+              <Box sx={{ minWidth: 300, mt: "10px" }}>
+                <FormControl sx={{ minWidth: 145 }}>
+                  <InputLabel id="demo-simple-select-label">Mode</InputLabel>
+                  <Select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    value={mode}
+                    label="Mode"
+                    onChange={handleModeChange}
+                    size="small"
+                  >
+                    <MenuItem value={"local"}>Local</MenuItem>
+                    <MenuItem value={"remote"}>Remote</MenuItem>
+                  </Select>
+                </FormControl>
+              </Box>
             </CardContent>
           </Card>
         </Grid>
@@ -276,18 +335,30 @@ const HomeView = () => {
                   </Tabs>
                 </Box>
                 <TabPanel value={value} index={0}>
-                  <PowerTab liveData={liveData} url={inputIP} />
+                  <PowerTab
+                    liveData={liveData}
+                    url={inputIP}
+                    mode={mode}
+                    mqttClient={clientRef.current}
+                  />
                 </TabPanel>
                 <TabPanel value={value} index={1}>
                   {/* <ChartsTab liveDataArray={liveDataArray} /> */}
                 </TabPanel>
                 <TabPanel value={value} index={2}>
-                  <LogicControlTab liveData={liveData} url={inputIP} />
+                  <LogicControlTab
+                    liveData={liveData}
+                    url={inputIP}
+                    mode={mode}
+                    mqttClient={clientRef.current}
+                  />
                 </TabPanel>
                 <TabPanel value={value} index={3}>
                   <ConfigTab
                     initConfigs={inits?.configs ?? null}
                     url={inputIP}
+                    mode={mode}
+                    mqttClient={clientRef.current}
                   />
                 </TabPanel>
               </Box>

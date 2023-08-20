@@ -1,14 +1,16 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import axios from "axios";
 
-export function useLiveData() {
+export function useLiveData(mode, mqttClient) {
   const [data, setData] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const [startFetching, setStartFetching] = useState(false);
   const [url, setUrl] = useState("");
-
+  // ref to store mqtt subscription topics
+  const topicsRefs = useRef([]);
+  const subTopicsRefs = useRef([]);
   const start = (url) => {
     setData(null);
     setError(null);
@@ -17,10 +19,37 @@ export function useLiveData() {
     setStartFetching(true);
   };
 
-  useEffect(() => {
-    let isMounted = true;
+  const topics = [
+    "/static-dynamic/response",
+    "/dido/1/response",
+    "/dido/2/response",
+    "/algorithms/1/response",
+    "/algorithms/2/response",
+    "/alarms/response",
+  ];
 
-    const fetchData = async () => {
+  const publishTopics = topics.map((topic) => topic.replace("/response", ""));
+
+  let stopRemoteListening = () => {
+    try {
+      topics.forEach((subscription) => {
+        mqttClient.unsubscribe(subscription);
+      });
+      // Clear all intervals
+      topicsRefs.current.forEach((intervalId) => clearInterval(intervalId));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    stopRemoteListening();
+
+    let isMounted = true;
+    let intervalIdLocal;
+    let intervalIdRemote;
+
+    const fetchDataLocal = async () => {
       try {
         const staticDynamic = await axios.get(url + "static-dynamic");
         let staticDynamicData = staticDynamic.data;
@@ -128,17 +157,164 @@ export function useLiveData() {
       }
     };
 
-    const intervalId = setInterval(() => {
-      if (startFetching) {
-        fetchData();
+    const fetchDataRemote = () => {
+      //subscribe to topics
+      topics.map((topic) => mqttClient.subscribe(topic));
+
+      mqttClient.on("message", (receivedTopic, message) => {
+        const payload = message.toString();
+        const result = JSON.parse(payload);
+
+        if (receivedTopic === "/static-dynamic/response") {
+          const nonNullDynamic = result.dynamic.filter((item) => item !== null);
+          updateData("static", result.static);
+          updateData("dynamic", nonNullDynamic);
+        }
+
+        if (
+          receivedTopic === "/dido/1/response" ||
+          receivedTopic === "/dido/2/response"
+        ) {
+          const didoData = result.dido_cards || [];
+          const source =
+            receivedTopic === "/dido/1/response" ? "dido1" : "dido2";
+          updateDidoData(didoData, source);
+        }
+
+        if (
+          receivedTopic === "/algorithms/1/response" ||
+          receivedTopic === "/algorithms/2/response"
+        ) {
+          const algorithmsData = result.algorithms || [];
+          const source =
+            receivedTopic === "/algorithms/1/response"
+              ? "algorithms1"
+              : "algorithms2";
+          updateAlgorithmsData(algorithmsData, source);
+        }
+
+        if (receivedTopic === "/alarms/response") {
+          updateData("alarms", result.alarms || []);
+        }
+      });
+
+      const updateData = (dataKey, newData) => {
+        setData((prevData) => ({
+          ...prevData,
+          [dataKey]:
+            dataKey === "static" ? newData : newData.filter((item) => !!item),
+        }));
+      };
+
+      const updateDidoData = (newData, source) => {
+        setData((prevData) => {
+          const prevDidoCards = prevData?.dido_cards || [];
+          const updatedDidoCards = prevDidoCards.filter(
+            (item) => item.source !== source
+          );
+          const cleanDidoNewData = newData.filter((item) => !!item);
+
+          const newDataWithSource = cleanDidoNewData.map((item) => ({
+            ...item,
+            source,
+          }));
+
+          const didoCardsAll = [
+            ...updatedDidoCards,
+            ...newDataWithSource,
+          ].filter((item) => !!item);
+          //dido1 cards are the cards that has the source dido1
+          const dido1Cards = didoCardsAll.filter(
+            (item) => item.source === "dido1"
+          );
+          //dido2 cards are the cards that has the source dido2
+          const dido2Cards = didoCardsAll.filter(
+            (item) => item.source === "dido2"
+          );
+
+          const orderedDidoCards = [...dido1Cards, ...dido2Cards];
+
+          return {
+            ...prevData,
+            dido_cards: orderedDidoCards.filter((item) => !!item),
+          };
+        });
+      };
+
+      const updateAlgorithmsData = (newData, source) => {
+        setData((prevData) => {
+          const prevAlgorithms = prevData?.algorithms || [];
+          const updatedAlgorithms = prevAlgorithms.filter(
+            (item) => item.source !== source
+          );
+
+          const cleanNewData = newData.filter((item) => !!item);
+
+          const newDataWithSource = cleanNewData.map((item) => ({
+            ...item,
+            source,
+          }));
+
+          const algorithmsAll = [
+            ...updatedAlgorithms,
+            ...newDataWithSource,
+          ].filter((item) => !!item);
+
+          const algorithms1 = algorithmsAll.filter(
+            (item) => item.source === "algorithms1"
+          );
+          const algorithms2 = algorithmsAll.filter(
+            (item) => item.source === "algorithms2"
+          );
+
+          const orderedAlgorithms = [...algorithms1, ...algorithms2];
+
+          return {
+            ...prevData,
+            algorithms: orderedAlgorithms,
+          };
+        });
+      };
+
+      // Publish to topics every 3 seconds
+      topicsRefs.current = publishTopics.map((topic) => {
+        setInterval(() => {
+          // console.log("publishing to topic", topic);
+          mqttClient.publish(topic, "1", {});
+        }, 3000);
+      });
+    };
+
+    if (mode === "local") {
+      clearInterval(intervalIdRemote);
+      clearInterval(intervalIdLocal);
+      stopRemoteListening();
+
+      intervalIdLocal = setInterval(() => {
+        if (startFetching) {
+          fetchDataLocal();
+        }
+      }, 3000); // send requests every 3 seconds until response is received
+    }
+
+    stopRemoteListening();
+    if (mode === "remote") {
+      clearInterval(intervalIdRemote);
+      clearInterval(intervalIdLocal);
+      stopRemoteListening();
+
+      if (startFetching && mqttClient?.connected) {
+        fetchDataRemote();
       }
-    }, 3000); // send requests every 3 seconds until response is received
+    }
 
     return () => {
       isMounted = false;
-      clearInterval(intervalId);
+      clearInterval(intervalIdLocal);
+      clearInterval(intervalIdRemote);
+      stopRemoteListening();
     };
-  }, [data, error, url, startFetching]);
+  }, [error, url, startFetching, mode]);
 
   return [data, error, start];
 }

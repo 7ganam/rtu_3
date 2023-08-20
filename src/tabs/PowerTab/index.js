@@ -11,9 +11,10 @@ import Grid from "@mui/material/Grid";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import TextField from "@mui/material/TextField";
 import axios from "axios";
+import mqttPost from "../../utils/mqttPost";
 import { useForm } from "react-hook-form";
 
-const PowerTab = ({ liveData, url }) => {
+const PowerTab = ({ liveData, url, mode, mqttClient }) => {
   let gotLiveData = !!liveData ? true : false;
   const [formState, setFormState] = useState("allHidden"); // allHidden,inputHidden, allVisible, allLoading
   const [allowFormInput, setAllowFormInput] = useState(false);
@@ -48,13 +49,26 @@ const PowerTab = ({ liveData, url }) => {
     const request = { count: newData.length, data: newData };
     console.log(request);
     setFormLoading(true);
-    try {
-      const response = await axios.post(url + "delete-address", request);
-      console.log(response.data);
-      setFormLoading(false);
-    } catch (error) {
-      setFormLoading(false);
-      console.error(error);
+
+    if (mode === "local") {
+      try {
+        const response = await axios.post(url + "delete-address", request);
+        console.log(response.data);
+        setFormLoading(false);
+      } catch (error) {
+        setFormLoading(false);
+        console.error(error);
+      }
+    } else if (mode === "remote") {
+      mqttPost(
+        mqttClient,
+        "/delete-address",
+        "/delete-address/response",
+        request,
+        () => {
+          setFormLoading(false);
+        }
+      );
     }
   };
 
@@ -293,6 +307,8 @@ const PowerTab = ({ liveData, url }) => {
             fromLoading={fromLoading}
             setFormLoading={setFormLoading}
             url={url}
+            mode={mode}
+            mqttClient={mqttClient}
           />
         )}
       </Grid>
