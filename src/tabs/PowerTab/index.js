@@ -252,7 +252,7 @@ const PowerTab = ({ liveData, url, mode, mqttClient }) => {
                   alignItems: "center",
                 }}
               >
-                {DynamicEntry.address}
+                {DynamicEntry.a}
               </Grid>
               <Grid
                 item
@@ -264,7 +264,7 @@ const PowerTab = ({ liveData, url, mode, mqttClient }) => {
                   alignItems: "center",
                 }}
               >
-                {DynamicEntry.varName}
+                {DynamicEntry.n}
               </Grid>
               <Grid
                 item
@@ -276,7 +276,7 @@ const PowerTab = ({ liveData, url, mode, mqttClient }) => {
                   alignItems: "center",
                 }}
               >
-                {DynamicEntry.multiplier}
+                {DynamicEntry.x}
               </Grid>
               <Grid
                 item
@@ -290,7 +290,7 @@ const PowerTab = ({ liveData, url, mode, mqttClient }) => {
               >
                 <OutlinedInput
                   inputProps={{ readOnly: true }}
-                  value={DynamicEntry.value}
+                  value={DynamicEntry.v}
                   id="controlled-text-field"
                   size="small"
                 />
@@ -323,47 +323,47 @@ const PowerTab = ({ liveData, url, mode, mqttClient }) => {
     let staticDataArray = [
       {
         reading: "Time data sent",
-        value: staticData.time,
+        value: staticData.t,
         units: "--",
       },
       {
         reading: "Voltage 1 RMS",
-        value: staticData.v1RMS,
+        value: staticData.a,
         units: "V",
       },
       {
         reading: "Voltage 2 RMS",
-        value: staticData.v2RMS,
+        value: staticData.b,
         units: "V",
       },
       {
         reading: "Voltage 3 RMS",
-        value: staticData.v3RMS,
+        value: staticData.c,
         units: "V",
       },
       {
         reading: "Current 1 RMS",
-        value: staticData.c1RMS,
+        value: staticData.d,
         units: "A",
       },
       {
         reading: "Current 2 RMS",
-        value: staticData.c2RMS,
+        value: staticData.e,
         units: "A",
       },
       {
         reading: "Current 3 RMS",
-        value: staticData.c3RMS,
+        value: staticData.g,
         units: "A",
       },
       {
         reading: "frequency",
-        value: staticData.frequency,
+        value: staticData.f,
         units: "Hz",
       },
       {
         reading: "Neutral Current",
-        value: staticData.cNeutral,
+        value: staticData.h,
         units: "A",
       },
       {

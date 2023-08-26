@@ -43,28 +43,26 @@ app.get("/init", (req, res) => {
 app.get("/static-dynamic", (req, res) => {
   res.status(200);
   const myMessage = {
-    static: {
-      time: "13:2:15 -- 2023/8/16",
-      v1RMS: "230.50",
-      v2RMS: "230.40",
-      v3RMS: "230.40",
-      c1RMS: "0.00",
-      c2RMS: "0.00",
-      c3RMS: "0.00",
-      frequency: "49.98",
-      cNeutral: "0.00",
+    s: {
+      t: "15:0:49 -- 23/8/26",
+      a: "232.50",
+      b: "232.50",
+      c: "232.50",
+      d: "0.00",
+      e: "0.00",
+      g: "0.00",
+      f: "50.03",
+      h: "0.00",
     },
-    dynamic: [
-      null,
-      { address: "0", varName: "Reading", multiplier: 1, value: "0" },
-      { address: "0", varName: "Reading", multiplier: 1, value: "0" },
-      { address: "0", varName: "Reading", multiplier: 1, value: "0" },
-      { address: "0", varName: "Reading", multiplier: 1, value: "0" },
-      { address: "0", varName: "Reading", multiplier: 1, value: "0" },
-      { address: "0", varName: "Reading", multiplier: 1, value: "0" },
-      { address: "0", varName: "Reading", multiplier: 1, value: "0" },
-      { address: "0", varName: "Reading", multiplier: 1, value: "0" },
+    d: [
+      { a: "58", n: "Reading", x: 1, v: "5004" },
+      { a: "0", n: "Reading", x: 1, v: "2317" },
+      { a: "2", n: "Reading", x: 1, v: "2317" },
     ],
+    f: {
+      d: 0,
+      a: 0,
+    },
   };
   res.send(JSON.stringify(myMessage));
 });

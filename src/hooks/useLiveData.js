@@ -54,106 +54,95 @@ export function useLiveData(mode, mqttClient) {
         const staticDynamic = await axios.get(url + "static-dynamic");
         let staticDynamicData = staticDynamic.data;
 
-        const nonNullDynamic = staticDynamicData.dynamic.filter(
+        const nonNullDynamic = staticDynamicData.d.filter(
           (item) => item !== null
         );
 
-        staticDynamicData.dynamic = nonNullDynamic;
+        staticDynamicData.d = nonNullDynamic;
 
         setData((prevData) => {
           return {
             ...prevData,
-            static: staticDynamicData.static,
-            dynamic: staticDynamicData.dynamic,
+            static: staticDynamicData.s,
+            dynamic: staticDynamicData.d,
           };
         });
 
-        const dido1 = await axios.get(url + "dido/1");
-        const dido2 = await axios.get(url + "dido/2");
+        const didoFlag = staticDynamicData?.f?.d;
+        const alarmsAlgorithmsFlag = staticDynamicData?.f?.a;
 
-        const dido1Data = dido1.data.dido_cards;
-        const dido2Data = dido2.data.dido_cards;
+        if (didoFlag) {
+          const dido1 = await axios.get(url + "dido/1");
+          const dido2 = await axios.get(url + "dido/2");
 
-        for (const [key, value] of Object.entries(dido1Data)) {
-          if (value === null) {
-            delete dido1Data.dido[key];
+          const dido1Data = dido1.data.dido_cards;
+          const dido2Data = dido2.data.dido_cards;
+
+          for (const [key, value] of Object.entries(dido1Data)) {
+            if (value === null) {
+              delete dido1Data.dido[key];
+            }
           }
-        }
 
-        for (const [key, value] of Object.entries(dido2Data)) {
-          if (value === null) {
-            delete dido2Data[key];
+          for (const [key, value] of Object.entries(dido2Data)) {
+            if (value === null) {
+              delete dido2Data[key];
+            }
           }
-        }
-        let dido = [...dido1Data, ...dido2Data];
+          let dido = [...dido1Data, ...dido2Data];
 
-        // remove untruthy values from array
-        dido = dido.filter((item) => !!item);
+          // remove untruthy values from array
+          dido = dido.filter((item) => !!item);
 
-        setData((prevData) => {
-          return {
-            ...prevData,
-            dido_cards: dido,
-          };
-        });
-
-        const algorithms1 = await axios.get(url + "algorithms/1");
-        const algorithms2 = await axios.get(url + "algorithms/2");
-
-        let algorithms1Data = [];
-        let algorithms2Data = [];
-
-        if (algorithms1?.data?.algorithms) {
-          algorithms1Data = algorithms1.data.algorithms;
-        }
-        if (algorithms2?.data?.algorithms) {
-          algorithms2Data = algorithms2.data.algorithms;
+          setData((prevData) => {
+            return {
+              ...prevData,
+              dido_cards: dido,
+            };
+          });
         }
 
-        let algorithms = [...algorithms1Data, ...algorithms2Data];
+        if (alarmsAlgorithmsFlag) {
+          const algorithms1 = await axios.get(url + "algorithms/1");
+          const algorithms2 = await axios.get(url + "algorithms/2");
 
-        // remove untruthy values from array
-        algorithms = algorithms.filter((item) => !!item);
+          let algorithms1Data = [];
+          let algorithms2Data = [];
 
-        setData((prevData) => {
-          return {
-            ...prevData,
-            algorithms: algorithms,
-          };
-        });
+          if (algorithms1?.data?.algorithms) {
+            algorithms1Data = algorithms1.data.algorithms;
+          }
+          if (algorithms2?.data?.algorithms) {
+            algorithms2Data = algorithms2.data.algorithms;
+          }
 
-        const alarms = await axios.get(url + "alarms");
+          let algorithms = [...algorithms1Data, ...algorithms2Data];
 
-        let alarmsData = alarms?.data?.alarms ?? [];
-        alarmsData = alarmsData.filter((item) => !!item);
+          // remove untruthy values from array
+          algorithms = algorithms.filter((item) => !!item);
 
-        setData((prevData) => {
-          return {
-            ...prevData,
-            alarms: alarmsData,
-          };
-        });
+          setData((prevData) => {
+            return {
+              ...prevData,
+              algorithms: algorithms,
+            };
+          });
 
-        // const result = {
-        //   static: staticDynamicData.static,
-        //   dynamic: staticDynamicData.dynamic,
-        //   dido_cards: dido,
-        //   algorithms: algorithms,
-        //   alarms: alarmsData,
-        // };
+          const alarms = await axios.get(url + "alarms");
 
-        // if (isMounted) {
-        //   setData(result);
-        //   // clearInterval(intervalId);
-        //   // setStartFetching(false);
-        //   // setLoading(false);
-        // }
+          let alarmsData = alarms?.data?.alarms ?? [];
+          alarmsData = alarmsData.filter((item) => !!item);
+
+          setData((prevData) => {
+            return {
+              ...prevData,
+              alarms: alarmsData,
+            };
+          });
+        }
       } catch (err) {
         setError(err);
         console.log("err :>> ", err);
-        // clearInterval(intervalId);
-        // setStartFetching(false);
-        // setLoading(false);
       }
     };
 
