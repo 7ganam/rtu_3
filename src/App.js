@@ -99,7 +99,7 @@ const HomeView = () => {
     clientRef.current
   );
 
-  console.log("liveData :>> ", liveData);
+  // console.log("liveData :>> ", liveData);
 
   // const liveData = {
   //   static: {

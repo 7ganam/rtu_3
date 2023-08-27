@@ -17,6 +17,7 @@ function AddAddressForm({
   setFormLoading,
   url,
   dynamicData,
+  dynamicForms,
   setAllowFormInput,
   mode,
   mqttClient,
@@ -32,19 +33,25 @@ function AddAddressForm({
     console.log(data);
     let oldData = dynamicData.map((item, ind) => ({
       index: ind,
-      address: item.address,
-      varName: item.varName,
-      multiple: item.multiplier,
+      a: dynamicForms[ind]?.a?.value ? dynamicForms[ind]?.a?.value : item.a,
+      n: dynamicForms[ind]?.n?.value ? dynamicForms[ind]?.n?.value : item.n,
+      x: dynamicForms[ind]?.x?.value ? dynamicForms[ind]?.x?.value : item.x,
     }));
-    let newData = [
-      ...oldData,
-      {
-        index: oldData.length,
-        address: data.address,
-        varName: data.name,
-        multiple: data.multiplier,
-      },
-    ];
+
+    let newData = [...oldData];
+
+    if (data.a && data.n && data.x) {
+      newData = [
+        ...oldData,
+        {
+          index: oldData.length,
+          a: data.a,
+          n: data.n,
+          x: data.x,
+        },
+      ];
+    }
+
     const request = { count: newData.length, data: newData };
     console.log("request :>> ", request);
     setFormLoading(true);
@@ -99,7 +106,7 @@ function AddAddressForm({
           >
             <OutlinedInput
               //   value={DynamicEntry.value}
-              {...register("address", { required: true })}
+              {...register("a")}
             />
           </Grid>
           <Grid
@@ -113,7 +120,7 @@ function AddAddressForm({
             }}
           >
             <OutlinedInput
-              {...register("name", { required: true })}
+              {...register("n")}
               //   value={DynamicEntry.value}
             />
           </Grid>
@@ -128,7 +135,7 @@ function AddAddressForm({
             }}
           >
             <OutlinedInput
-              {...register("multiplier", { required: true })}
+              {...register("x")}
               //   value={DynamicEntry.value}
             />
           </Grid>

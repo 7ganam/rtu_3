@@ -8,6 +8,7 @@ export function useLiveData(mode, mqttClient) {
   const [loading, setLoading] = useState(false);
   const [startFetching, setStartFetching] = useState(false);
   const [url, setUrl] = useState("");
+  const [isFirstRequest, setIsFirstRequest] = useState(true);
   // ref to store mqtt subscription topics
   const topicsRefs = useRef([]);
   const subTopicsRefs = useRef([]);
@@ -71,7 +72,7 @@ export function useLiveData(mode, mqttClient) {
         const didoFlag = staticDynamicData?.f?.d;
         const alarmsAlgorithmsFlag = staticDynamicData?.f?.a;
 
-        if (didoFlag) {
+        if (didoFlag || isFirstRequest) {
           const dido1 = await axios.get(url + "dido/1");
           const dido2 = await axios.get(url + "dido/2");
 
@@ -102,7 +103,7 @@ export function useLiveData(mode, mqttClient) {
           });
         }
 
-        if (alarmsAlgorithmsFlag) {
+        if (alarmsAlgorithmsFlag || isFirstRequest) {
           const algorithms1 = await axios.get(url + "algorithms/1");
           const algorithms2 = await axios.get(url + "algorithms/2");
 
@@ -140,6 +141,8 @@ export function useLiveData(mode, mqttClient) {
             };
           });
         }
+
+        setIsFirstRequest(false);
       } catch (err) {
         setError(err);
         console.log("err :>> ", err);
@@ -303,7 +306,7 @@ export function useLiveData(mode, mqttClient) {
       clearInterval(intervalIdRemote);
       stopRemoteListening();
     };
-  }, [error, url, startFetching, mode]);
+  }, [error, url, startFetching, mode, isFirstRequest]);
 
   return [data, error, start];
 }

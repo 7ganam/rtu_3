@@ -118,6 +118,16 @@ function AlarmsTab({ alarms, url, cards, mode, mqttClient }) {
     }
   };
 
+  const calculateBackgroundColor = (alarm) => {
+    if (alarm?.value === "alarm" && alarm?.state) {
+      return "#ff0000";
+    } else if (alarm?.value === "warning" && alarm?.state) {
+      return "#ffff00";
+    } else {
+      return "#ffffff";
+    }
+  };
+
   return (
     <Box
       sx={{
@@ -406,6 +416,7 @@ function AlarmsTab({ alarms, url, cards, mode, mqttClient }) {
                     display: "flex",
                     justifyContent: "center",
                     alignItems: "center",
+                    bgcolor: calculateBackgroundColor(alarm),
                   }}
                 >
                   {alarm?.value}

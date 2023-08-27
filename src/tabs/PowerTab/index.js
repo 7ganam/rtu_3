@@ -72,6 +72,28 @@ const PowerTab = ({ liveData, url, mode, mqttClient }) => {
     }
   };
 
+  const [dynamicForms, SetDynamicForms] = useState([]);
+
+  const onDynamicFormChange = (e, index, key) => {
+    //if dynamicForms array entry of index (index) object has a key of (key) set the value of the key to event value
+    //else create a new object with the key and value and push it to the dynamicForms array
+    let dynamicFormsCopy = [...dynamicForms];
+    if (dynamicFormsCopy[index]) {
+      dynamicFormsCopy[index][key] = {};
+      dynamicFormsCopy[index][key]["value"] = e.target.value;
+      dynamicFormsCopy[index][key]["editing"] = true;
+    }
+    if (!dynamicFormsCopy[index]) {
+      dynamicFormsCopy[index] = {};
+      dynamicFormsCopy[index][key] = {};
+
+      dynamicFormsCopy[index][key]["value"] = e.target.value;
+      dynamicFormsCopy[index][key]["editing"] = true;
+    }
+
+    SetDynamicForms(dynamicFormsCopy);
+  };
+
   function renderDynamicRows(liveData) {
     return (
       <Grid container spacing={3}>
@@ -252,7 +274,23 @@ const PowerTab = ({ liveData, url, mode, mqttClient }) => {
                   alignItems: "center",
                 }}
               >
-                {DynamicEntry.a}
+                <OutlinedInput
+                  sx={{
+                    bgcolor:
+                      dynamicForms[index]?.a?.value === DynamicEntry.a ||
+                      !dynamicForms[index]?.a?.editing
+                        ? "white"
+                        : "#fff4e3",
+                  }}
+                  value={
+                    dynamicForms[index]?.a?.editing
+                      ? dynamicForms[index]?.a?.value
+                      : DynamicEntry.a
+                  }
+                  id="controlled-text-field"
+                  size="small"
+                  onChange={(e) => onDynamicFormChange(e, index, "a")}
+                />
               </Grid>
               <Grid
                 item
@@ -264,7 +302,23 @@ const PowerTab = ({ liveData, url, mode, mqttClient }) => {
                   alignItems: "center",
                 }}
               >
-                {DynamicEntry.n}
+                <OutlinedInput
+                  sx={{
+                    bgcolor:
+                      dynamicForms[index]?.n?.value === DynamicEntry.n ||
+                      !dynamicForms[index]?.n?.editing
+                        ? "white"
+                        : "#fff4e3",
+                  }}
+                  value={
+                    dynamicForms[index]?.n?.editing
+                      ? dynamicForms[index]?.n?.value
+                      : DynamicEntry.n
+                  }
+                  id="controlled-text-field"
+                  size="small"
+                  onChange={(e) => onDynamicFormChange(e, index, "n")}
+                />
               </Grid>
               <Grid
                 item
@@ -276,7 +330,23 @@ const PowerTab = ({ liveData, url, mode, mqttClient }) => {
                   alignItems: "center",
                 }}
               >
-                {DynamicEntry.x}
+                <OutlinedInput
+                  sx={{
+                    bgcolor:
+                      dynamicForms[index]?.x?.value === DynamicEntry.x ||
+                      !dynamicForms[index]?.x?.editing
+                        ? "white"
+                        : "#fff4e3",
+                  }}
+                  value={
+                    dynamicForms[index]?.x?.editing
+                      ? dynamicForms[index]?.x?.value
+                      : DynamicEntry.x
+                  }
+                  id="controlled-text-field"
+                  size="small"
+                  onChange={(e) => onDynamicFormChange(e, index, "x")}
+                />
               </Grid>
               <Grid
                 item
@@ -303,6 +373,7 @@ const PowerTab = ({ liveData, url, mode, mqttClient }) => {
           <AddAddressForm
             index={liveData?.dynamic?.length}
             dynamicData={liveData?.dynamic}
+            dynamicForms={dynamicForms}
             setAllowFormInput={setAllowFormInput}
             fromLoading={fromLoading}
             setFormLoading={setFormLoading}

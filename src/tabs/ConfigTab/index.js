@@ -450,7 +450,14 @@ const ConfigTab = ({ initConfigs, url, mode, mqttClient }) => {
                 alignItems: "center",
               }}
             >
-              <OutlinedInput value={formData?.eth_mac} sx={{ width: "100%" }} />
+              {/* <OutlinedInput value={formData?.eth_mac} sx={{ width: "100%" }} /> */}
+
+              <OutlinedInput value={formData?.eth_mac?.slice(0, 2)} />
+              <OutlinedInput value={formData?.eth_mac?.slice(2, 4)} />
+              <OutlinedInput value={formData?.eth_mac?.slice(4, 6)} />
+              <OutlinedInput value={formData?.eth_mac?.slice(6, 8)} />
+              <OutlinedInput value={formData?.eth_mac?.slice(8, 10)} />
+              <OutlinedInput value={formData?.eth_mac?.slice(10, 12)} />
             </Grid>
             {/* ------------------- */}
           </Grid>
