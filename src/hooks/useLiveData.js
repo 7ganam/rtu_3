@@ -2,7 +2,11 @@ import { useEffect, useRef, useState } from "react";
 
 import axios from "axios";
 
+// a function to make a delay inside an async function
+const delay = (ms) => new Promise((res) => setTimeout(res, ms));
+
 export function useLiveData(mode, mqttClient) {
+  const firstRequestDelay = 500;
   const [data, setData] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -52,6 +56,10 @@ export function useLiveData(mode, mqttClient) {
 
     const fetchDataLocal = async () => {
       try {
+        if (isFirstRequest) {
+          await delay(firstRequestDelay);
+        }
+
         const staticDynamic = await axios.get(url + "static-dynamic");
         let staticDynamicData = staticDynamic.data;
 
@@ -73,7 +81,13 @@ export function useLiveData(mode, mqttClient) {
         const alarmsAlgorithmsFlag = staticDynamicData?.f?.a;
 
         if (didoFlag || isFirstRequest) {
+          if (isFirstRequest) {
+            await delay(firstRequestDelay);
+          }
           const dido1 = await axios.get(url + "dido/1");
+          if (isFirstRequest) {
+            await delay(firstRequestDelay);
+          }
           const dido2 = await axios.get(url + "dido/2");
 
           const dido1Data = dido1.data.dido_cards;
@@ -104,7 +118,13 @@ export function useLiveData(mode, mqttClient) {
         }
 
         if (alarmsAlgorithmsFlag || isFirstRequest) {
+          if (isFirstRequest) {
+            await delay(firstRequestDelay);
+          }
           const algorithms1 = await axios.get(url + "algorithms/1");
+          if (isFirstRequest) {
+            await delay(firstRequestDelay);
+          }
           const algorithms2 = await axios.get(url + "algorithms/2");
 
           let algorithms1Data = [];
@@ -129,6 +149,9 @@ export function useLiveData(mode, mqttClient) {
             };
           });
 
+          if (isFirstRequest) {
+            await delay(firstRequestDelay);
+          }
           const alarms = await axios.get(url + "alarms");
 
           let alarmsData = alarms?.data?.alarms ?? [];
@@ -282,11 +305,17 @@ export function useLiveData(mode, mqttClient) {
       clearInterval(intervalIdLocal);
       stopRemoteListening();
 
+      //make first request that will have delays between requests
+      if (startFetching) {
+        fetchDataLocal();
+      }
+
+      //after the first request, make requests every 3 seconds
       intervalIdLocal = setInterval(() => {
-        if (startFetching) {
+        if (startFetching && !isFirstRequest) {
           fetchDataLocal();
         }
-      }, 3000); // send requests every 3 seconds until response is received
+      }, 3000);
     }
 
     stopRemoteListening();

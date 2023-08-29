@@ -2,7 +2,18 @@ const express = require("express");
 var cors = require("cors");
 
 const app = express();
+// Enable CORS for all routes
 app.use(cors());
+app.use((req, res, next) => {
+  res.set("Access-Control-Allow-Origin", "*");
+  res.set("Access-Control-Allow-Methods", "GET, POST, OPTIONS, PUT, PATCH");
+  res.set("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  res.set("Access-Control-Allow-Credentials", "true");
+
+  res.set("Access-Control-Allow-Private-Network", "true");
+  console.log(res.get("Access-Control-Allow-Origin"));
+  next();
+});
 
 const PORT = 5000;
 
