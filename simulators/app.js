@@ -11,7 +11,12 @@ app.use((req, res, next) => {
   res.set("Access-Control-Allow-Credentials", "true");
 
   res.set("Access-Control-Allow-Private-Network", "true");
-  console.log(res.get("Access-Control-Allow-Origin"));
+  next();
+});
+
+//print request url 
+app.use((req, res, next) => { 
+  console.log(req.originalUrl);
   next();
 });
 

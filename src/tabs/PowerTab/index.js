@@ -369,8 +369,9 @@ const PowerTab = ({ liveData, url, mode, mqttClient }) => {
           );
         })}
         {/* ------------------- */}
-        {formState !== "inputHidden" && formState !== "allHidden" && (
+        {
           <AddAddressForm
+            formState={formState}
             index={liveData?.dynamic?.length}
             dynamicData={liveData?.dynamic}
             dynamicForms={dynamicForms}
@@ -381,7 +382,7 @@ const PowerTab = ({ liveData, url, mode, mqttClient }) => {
             mode={mode}
             mqttClient={mqttClient}
           />
-        )}
+        }
       </Grid>
     );
   }

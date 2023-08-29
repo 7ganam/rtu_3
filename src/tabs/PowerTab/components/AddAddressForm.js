@@ -12,6 +12,7 @@ import mqttPost from "../../../utils/mqttPost";
 import { useForm } from "react-hook-form";
 
 function AddAddressForm({
+  formState,
   index,
   fromLoading,
   setFormLoading,
@@ -82,69 +83,73 @@ function AddAddressForm({
     <>
       {!fromLoading ? (
         <>
-          <Grid
-            item
-            xs={3}
-            sx={{
-              textAlign: "right",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            {index}
-          </Grid>
-          <Grid
-            item
-            xs={2}
-            sx={{
-              textAlign: "right",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <OutlinedInput
-              //   value={DynamicEntry.value}
-              {...register("a")}
-            />
-          </Grid>
-          <Grid
-            item
-            xs={3}
-            sx={{
-              textAlign: "right",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <OutlinedInput
-              {...register("n")}
-              //   value={DynamicEntry.value}
-            />
-          </Grid>
-          <Grid
-            item
-            xs={2}
-            sx={{
-              textAlign: "right",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <OutlinedInput
-              {...register("x")}
-              //   value={DynamicEntry.value}
-            />
-          </Grid>
+          {formState !== "inputHidden" && formState !== "allHidden" && (
+            <>
+              <Grid
+                item
+                xs={3}
+                sx={{
+                  textAlign: "right",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                {index}
+              </Grid>
+              <Grid
+                item
+                xs={2}
+                sx={{
+                  textAlign: "right",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <OutlinedInput
+                  //   value={DynamicEntry.value}
+                  {...register("a")}
+                />
+              </Grid>
+              <Grid
+                item
+                xs={3}
+                sx={{
+                  textAlign: "right",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <OutlinedInput
+                  {...register("n")}
+                  //   value={DynamicEntry.value}
+                />
+              </Grid>
+              <Grid
+                item
+                xs={2}
+                sx={{
+                  textAlign: "right",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <OutlinedInput
+                  {...register("x")}
+                  //   value={DynamicEntry.value}
+                />
+              </Grid>
+            </>
+          )}
           <Button
             onClick={handleSubmit(onSubmit)}
             variant="contained"
             sx={{ width: "50%", margin: "auto", mt: "20px" }}
           >
-            Generate new address
+            Generate
           </Button>
         </>
       ) : (
