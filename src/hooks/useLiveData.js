@@ -306,8 +306,15 @@ export function useLiveData(mode, mqttClient) {
       stopRemoteListening();
 
       //make first request that will have delays between requests
+      // if (startFetching) {
+      //   fetchDataLocal();
+      // }
+
+      //make a first request after a delay of 500ms
       if (startFetching) {
-        fetchDataLocal();
+        setTimeout(() => {
+          fetchDataLocal();
+        }, firstRequestDelay);
       }
 
       //after the first request, make requests every 3 seconds
