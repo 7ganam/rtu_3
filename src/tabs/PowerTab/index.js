@@ -98,9 +98,15 @@ const PowerTab = ({ liveData, url, mode, mqttClient }) => {
   const setDynamicFormsToNonEditing = () => {
     let dynamicFormsCopy = [...dynamicForms];
     dynamicFormsCopy.forEach((item) => {
-      item.a.editing = false;
-      item.n.editing = false;
-      item.x.editing = false;
+      if (item?.a?.editing) {
+        item.a.editing = false;
+      }
+      if (item?.n?.editing) {
+        item.n.editing = false;
+      }
+      if (item?.x?.editing) {
+        item.x.editing = false;
+      }
     });
     SetDynamicForms(dynamicFormsCopy);
   };
