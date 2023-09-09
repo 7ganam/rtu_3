@@ -41,7 +41,13 @@ function AddAddressForm({
 
     let newData = [...oldData];
 
-    if (data.a && data.n && data.x) {
+    if (
+      formState !== "inputHidden" &&
+      formState !== "allHidden" &&
+      data.a &&
+      data.n &&
+      data.x
+    ) {
       newData = [
         ...oldData,
         {
