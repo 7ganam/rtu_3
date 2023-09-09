@@ -41,6 +41,7 @@ const PowerTab = ({ liveData, url, mode, mqttClient }) => {
 
   const onSubmit = async (data) => {
     //parse string to integer
+    setDynamicFormsToNonEditing();
     const deletedIndex = parseInt(data.address);
     let newData = liveData.dynamic.filter(
       (item, index) => index !== deletedIndex
@@ -91,6 +92,16 @@ const PowerTab = ({ liveData, url, mode, mqttClient }) => {
       dynamicFormsCopy[index][key]["editing"] = true;
     }
 
+    SetDynamicForms(dynamicFormsCopy);
+  };
+
+  const setDynamicFormsToNonEditing = () => {
+    let dynamicFormsCopy = [...dynamicForms];
+    dynamicFormsCopy.forEach((item) => {
+      item.a.editing = false;
+      item.n.editing = false;
+      item.x.editing = false;
+    });
     SetDynamicForms(dynamicFormsCopy);
   };
 
