@@ -295,7 +295,7 @@ export function useLiveData(mode, mqttClient) {
 
     if (mode === "remote") {
       clearInterval(remotIntervalIdRef.current);
-      subscribeRemote();
+
       //make a first request after a delay of 500ms
       if (startFetching) {
         setTimeout(() => {
