@@ -88,7 +88,6 @@ const HomeView = () => {
   }, []);
 
   const [inputIP, setInputIp] = useState(process.env.REACT_APP_URL);
-  console.log("inputIP :>> ", process.env.REACT_APP_URL);
   const [inits, error, startInit, loadingInit] = useInit(
     mode,
     clientRef.current

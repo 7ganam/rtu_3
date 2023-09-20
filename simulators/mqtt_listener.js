@@ -21,11 +21,11 @@ client.on("connect", function () {
 
 //handle incoming messages
 client.on("message", function (topic, message, packet) {
-  // console.log("message is " + message);
-  // console.log("topic is " + topic);
+  console.log("message is " + message);
+  console.log("topic is " + topic);
   //if topic is init then send {x:1} to init_response
   if (topic === `/init`) {
-    // console.log("message is " + message);
+    console.log("message is " + message);
     const myMessage = {
       dynamicValues: [
         { address: ADDRESS1, varName: VAR_NAME1, multiplier: MULTIPLIER1 },
@@ -50,28 +50,26 @@ client.on("message", function (topic, message, packet) {
   if (topic === `/static-dynamic`) {
     // console.log("/static-dynamic " + message);
     const myMessage = {
-      static: {
-        time: "13:2:15 -- 2023/8/16",
-        v1RMS: "230.50",
-        v2RMS: "230.40",
-        v3RMS: "230.40",
-        c1RMS: "0.00",
-        c2RMS: "0.00",
-        c3RMS: "0.00",
-        frequency: "49.98",
-        cNeutral: "0.00",
+      s: {
+        t: "15:0:49 -- 23/8/26",
+        a: "232.50",
+        b: "232.50",
+        c: "232.50",
+        d: "0.00",
+        e: "0.00",
+        g: "0.00",
+        f: "50.03",
+        h: "0.00",
       },
-      dynamic: [
-        null,
-        { address: "0", varName: "Reading", multiplier: 1, value: "0" },
-        { address: "0", varName: "Reading", multiplier: 1, value: "0" },
-        { address: "0", varName: "Reading", multiplier: 1, value: "0" },
-        { address: "0", varName: "Reading", multiplier: 1, value: "0" },
-        { address: "0", varName: "Reading", multiplier: 1, value: "0" },
-        { address: "0", varName: "Reading", multiplier: 1, value: "0" },
-        { address: "0", varName: "Reading", multiplier: 1, value: "0" },
-        { address: "0", varName: "Reading", multiplier: 1, value: "0" },
+      d: [
+        { a: "5", n: "Reading", x: 1, v: "5004" },
+        { a: "0", n: "Readi", x: 1, v: "2317" },
+        { a: "2", n: "Reading", x: 1, v: "2317" },
       ],
+      f: {
+        d: 0,
+        a: 0,
+      },
     };
     client.publish(`/static-dynamic/response`, JSON.stringify(myMessage), {}); // if there is no dynamic values you must send '0'
   }
@@ -131,9 +129,6 @@ client.on("message", function (topic, message, packet) {
     // console.log("/dido/2 " + message);
     const myMessage = {
       dido_cards: [
-        null,
-        null,
-        null,
         {
           number: 4,
           type: "input",
@@ -204,16 +199,6 @@ client.on("message", function (topic, message, packet) {
     // console.log("/algorithms/2" + message);
     const myMessage = {
       algorithms: [
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
         {
           number: 11,
           logic_variable: "RMS Voltage 1",
